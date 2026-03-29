@@ -95,28 +95,39 @@
                 </div>
 
                 <div class="z-10 relative">
-                    <div
+                    <div <<<<<<< Updated upstream
                         class="w-16 h-16 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 mb-6 flex items-center justify-center shadow-lg">
                         <i data-lucide="user" class="text-white w-8 h-8"></i>
                     </div>
                     <h1 class="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">你好，我是 <br /><span
                             class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Your
                             Name</span></h1>
-                    <div
-                        class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-blue-500/30 bg-blue-500/10 text-sm font-semibold text-blue-300 mb-6 backdrop-blur-md">
-                        <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
-                        Full-stack Developer
-                    </div>
-                    <p class="text-gray-400 mb-8 max-w-sm leading-relaxed">
-                        热爱构建优雅、高性能的现代 Web 应用。穿梭于设计与代码之间，探索技术的无限可能。
-                    </p>
+                    =======
+                    class="w-16 h-16 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 mb-6 flex items-center
+                    justify-center shadow-lg overflow-hidden border-2 border-white/10">
+                    <img src="https://github.com/MieSheeeep.png" alt="MieSheeeep" class="w-full h-full object-cover">
+                </div>
+                <h1 class="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">你好，我是 <br /><span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">MieSheeeep</span>
+                </h1>
+                >>>>>>> Stashed changes
+                <div
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-blue-500/30 bg-blue-500/10 text-sm font-semibold text-blue-300 mb-6 backdrop-blur-md">
+                    <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+                    Full-stack Developer
+                </div>
+                <p class="text-gray-400 mb-8 max-w-sm leading-relaxed">
+                    热爱构建优雅、高性能的现代 Web 应用。穿梭于设计与代码之间，探索技术的无限可能。
+                </p>
 
-                    <!-- 社交媒体图标 -->
-                    <div class="flex gap-4">
-                        <a href="https://github.com" target="_blank"
-                            class="p-3 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:-translate-y-1 transition-all text-gray-300 hover:text-white group">
-                            <i data-lucide="github"
-                                class="w-5 h-5 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all"></i>
+                <!-- 社交媒体图标 -->
+                <div class="flex gap-4">
+                    <<<<<<< Updated upstream <a href="https://github.com" target="_blank"=======<a
+                        href="https://github.com/MieSheeeep" target="_blank">>>>>>> Stashed changes
+                        class="p-3 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:-translate-y-1
+                        transition-all text-gray-300 hover:text-white group">
+                        <i data-lucide="github"
+                            class="w-5 h-5 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all"></i>
                         </a>
                         <a href="https://twitter.com" target="_blank"
                             class="p-3 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:-translate-y-1 transition-all text-gray-300 hover:text-white group">
@@ -128,108 +139,45 @@
                             <i data-lucide="mail"
                                 class="w-5 h-5 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all"></i>
                         </a>
-                    </div>
                 </div>
-            </section>
+    </div>
+    </section>
 
-            <!-- 2. Project Section: 项目 1 -->
-            <a href="#" target="_blank"
-                class="glass-card glass-card-hover col-span-1 p-6 flex flex-col justify-between group">
-                <div>
-                    <div
-                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/20 flex items-center justify-center mb-5 text-indigo-400">
-                        <i data-lucide="code-2" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2 group-hover:text-indigo-400 transition-colors">Project Alpha</h3>
-                    <p class="text-sm text-gray-400 line-clamp-2">基于 Next.js 14 和 Tailwind 构建的超快速响应式电子商务平台系统。</p>
-                </div>
-                <div class="flex justify-between items-center mt-6">
-                    <span class="text-xs font-mono text-gray-500">React · Next.js</span>
-                    <div
-                        class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-indigo-500/20 transition-colors">
-                        <i data-lucide="arrow-up-right"
-                            class="w-4 h-4 text-gray-400 group-hover:text-indigo-400 transition-colors"></i>
-                    </div>
-                </div>
+    <!-- 2. Project Section: 动态抓取 GitHub 项目 -->
+    <div id="github-projects-container" class="contents">
+        <div
+            class="glass-card col-span-1 md:col-span-2 lg:col-span-2 p-6 flex flex-col justify-center items-center text-gray-500 animate-pulse min-h-[200px]">
+            <i data-lucide="loader-2" class="w-8 h-8 animate-spin mb-2 text-blue-400"></i>
+            <span class="text-sm">加载项目中...</span>
+        </div>
+    </div>
+
+    <!-- 3. Blog Section (占满可用列) -->
+    <section class="glass-card col-span-1 md:col-span-3 lg:col-span-4 p-6 md:p-8 flex flex-col">
+        <div class="flex items-center justify-between mb-8 pb-4 border-b border-white/10">
+            <h2 class="text-2xl font-bold flex items-center gap-3">
+                <i data-lucide="book-open" class="text-blue-400 w-6 h-6"></i>
+                文章与思考
+            </h2>
+            <a href="#"
+                class="text-sm font-medium text-gray-400 hover:text-blue-400 flex items-center transition-colors">
+                全部文章 <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
             </a>
+        </div>
 
-            <!-- 2. Project Section: 项目 2 -->
-            <a href="#" target="_blank"
-                class="glass-card glass-card-hover col-span-1 p-6 flex flex-col justify-between group">
-                <div>
-                    <div
-                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/20 flex items-center justify-center mb-5 text-emerald-400">
-                        <i data-lucide="database" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2 group-hover:text-emerald-400 transition-colors">API Gateway</h3>
-                    <p class="text-sm text-gray-400 line-clamp-2">使用 Go 编写的高并发流媒体 API 网关，支持微服务路由分发。</p>
-                </div>
-                <div class="flex justify-between items-center mt-6">
-                    <span class="text-xs font-mono text-gray-500">Golang · Redis</span>
-                    <div
-                        class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-emerald-500/20 transition-colors">
-                        <i data-lucide="arrow-up-right"
-                            class="w-4 h-4 text-gray-400 group-hover:text-emerald-400 transition-colors"></i>
-                    </div>
-                </div>
-            </a>
+        <!-- 博客卡片容器 -->
+        <div id="blog-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- JS 动态渲染的博客卡片占位 -->
+        </div>
+    </section>
+    </main>
 
-            <!-- 2. Project Section: 项目 3 -->
-            <a href="#" target="_blank"
-                class="glass-card glass-card-hover col-span-1 md:col-span-2 lg:col-span-2 p-6 flex flex-col justify-between group relative overflow-hidden">
-                <div
-                    class="absolute right-0 top-0 w-32 h-32 bg-rose-500/10 blur-[50px] rounded-full pointer-events-none group-hover:bg-rose-500/20 transition-all duration-500">
-                </div>
-                <div class="z-10">
-                    <div
-                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-rose-500/20 to-orange-500/20 border border-rose-500/20 flex items-center justify-center mb-5 text-rose-400">
-                        <i data-lucide="palette" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2 group-hover:text-rose-400 transition-colors">Glassmorphism UI Kit
-                    </h3>
-                    <p class="text-md text-gray-400 max-w-sm mb-4">
-                        一套开源的 React 玻璃拟态组件库，帮助开发者快速构建现代化视觉界面。内置主题引擎和物理动效。
-                    </p>
-                </div>
-                <div class="flex justify-between items-end z-10 mt-2">
-                    <div class="flex gap-2">
-                        <span
-                            class="text-xs px-2 py-1 rounded-md bg-white/5 border border-white/10 text-gray-300">React</span>
-                        <span
-                            class="text-xs px-2 py-1 rounded-md bg-white/5 border border-white/10 text-gray-300">Framer
-                            Motion</span>
-                    </div>
-                    <div
-                        class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-rose-500/20 transition-colors">
-                        <i data-lucide="github"
-                            class="w-4 h-4 text-gray-400 group-hover:text-rose-400 transition-colors"></i>
-                    </div>
-                </div>
-            </a>
-
-            <!-- 3. Blog Section (占满可用列) -->
-            <section class="glass-card col-span-1 md:col-span-3 lg:col-span-4 p-6 md:p-8 flex flex-col">
-                <div class="flex items-center justify-between mb-8 pb-4 border-b border-white/10">
-                    <h2 class="text-2xl font-bold flex items-center gap-3">
-                        <i data-lucide="book-open" class="text-blue-400 w-6 h-6"></i>
-                        文章与思考
-                    </h2>
-                    <a href="#"
-                        class="text-sm font-medium text-gray-400 hover:text-blue-400 flex items-center transition-colors">
-                        全部文章 <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
-                    </a>
-                </div>
-
-                <!-- 博客卡片容器 -->
-                <div id="blog-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- JS 动态渲染的博客卡片占位 -->
-                </div>
-            </section>
-        </main>
-
-        <footer class="mt-12 text-center text-sm text-gray-500 pb-8">
-            <p>&copy; <span id="year"></span> Your Name. Built with Tailwind CSS & Vanilla JS.</p>
-        </footer>
+    <footer class="mt-12 text-center text-sm text-gray-500 pb-8">
+        <<<<<<< Updated upstream <p>&copy; <span id="year"></span> Your Name. Built with Tailwind CSS & Vanilla JS.</p>
+            =======
+            <p>&copy; <span id="year"></span> MieSheeeep. Built with Tailwind CSS & Vanilla JS.</p>
+            >>>>>>> Stashed changes
+    </footer>
     </div>
 
     <!-- 核心逻辑：数据解耦与渲染 -->
@@ -317,7 +265,93 @@
 
         /**
          * =========================================
+<<<<<<< Updated upstream
          * 3. 初始化与生命周期
+=======
+         * 3. 动态抓取 GitHub 项目
+         * =========================================
+         */
+        async function fetchGitHubProjects(username) {
+            const container = document.getElementById('github-projects-container');
+            if (!container) return;
+
+            try {
+                // Fetch public repos, sorted by updated
+                const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`);
+                if (!res.ok) throw new Error('Failed to fetch repos');
+
+                const repos = await res.json();
+
+                // Filter out forks if desired, and take top 3
+                const topRepos = repos.filter(repo => !repo.fork).slice(0, 3);
+
+                if (topRepos.length === 0) {
+                    container.innerHTML = `<div class="glass-card col-span-1 p-6 flex items-center justify-center text-gray-500">暂无开源项目</div>`;
+                    return;
+                }
+
+                // Render styles: specific colors for different index
+                const styles = [
+                    {
+                        icon: 'code-2',
+                        colorClass: 'text-indigo-400',
+                        bgClass: 'bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border-indigo-500/20',
+                        hoverClass: 'group-hover:text-indigo-400 group-hover:bg-indigo-500/20'
+                    },
+                    {
+                        icon: 'database',
+                        colorClass: 'text-emerald-400',
+                        bgClass: 'bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border-emerald-500/20',
+                        hoverClass: 'group-hover:text-emerald-400 group-hover:bg-emerald-500/20'
+                    },
+                    {
+                        icon: 'star',
+                        extraClasses: 'md:col-span-2 lg:col-span-2 relative overflow-hidden',
+                        extraHTML: `<div class="absolute right-0 top-0 w-32 h-32 bg-rose-500/10 blur-[50px] rounded-full pointer-events-none group-hover:bg-rose-500/20 transition-all duration-500"></div>`,
+                        colorClass: 'text-rose-400',
+                        bgClass: 'bg-gradient-to-br from-rose-500/20 to-orange-500/20 border-rose-500/20',
+                        hoverClass: 'group-hover:text-rose-400 group-hover:bg-rose-500/20'
+                    }
+                ];
+
+                const html = topRepos.map((repo, index) => {
+                    const style = styles[index % styles.length];
+                    const extraClasses = style.extraClasses || 'col-span-1';
+                    const langHtml = repo.language ? `<span class="text-xs font-mono text-gray-500">${repo.language}</span>` : '';
+
+                    return `
+                    <a href="${repo.html_url}" target="_blank" class="glass-card glass-card-hover ${extraClasses} p-6 flex flex-col justify-between group">
+                        ${style.extraHTML || ''}
+                        <div class="z-10">
+                            <div class="w-12 h-12 rounded-xl ${style.bgClass} border flex items-center justify-center mb-5 ${style.colorClass}">
+                                <i data-lucide="${style.icon}" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2 group-hover:text-white transition-colors">${repo.name}</h3>
+                            <p class="text-sm text-gray-400 line-clamp-2 mb-4">${repo.description || '暂无描述'}</p>
+                        </div>
+                        <div class="flex justify-between items-center mt-2 z-10">
+                            <div class="flex gap-2 items-center">
+                                ${langHtml}
+                                <span class="text-xs font-mono text-gray-500 flex items-center gap-1"><i data-lucide="star" class="w-3 h-3"></i> ${repo.stargazers_count}</span>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition-colors ${style.hoverClass.split(' ')[1]}">
+                                <i data-lucide="arrow-up-right" class="w-4 h-4 text-gray-400 ${style.hoverClass.split(' ')[0]} transition-colors"></i>
+                    </a>
+                    `;
+                }).join('');
+
+                container.innerHTML = html;
+
+            } catch (err) {
+                console.error(err);
+                container.innerHTML = `<div class="glass-card col-span-1 p-6 flex items-center justify-center text-red-400">加载项目失败</div>`;
+            }
+        }
+
+        /**
+         * =========================================
+         * 4. 初始化与生命周期
+>>>>>>> Stashed changes
          * =========================================
          */
         document.addEventListener('DOMContentLoaded', () => {
@@ -325,7 +359,17 @@
             // 1) 初始渲染静态博客数据
             renderBlogs(BLOG_CONFIG);
 
+<<<<<<< Updated upstream
             // 2) 初始化图标体系
+=======
+            // 2) 获取并渲染 GitHub 项目
+            fetchGitHubProjects('MieSheeeep').then(() => {
+                // 等待 DOM 插入后再次初始化新增的图标
+                lucide.createIcons();
+            });
+
+            // 3) 初始化图标体系 (针对静态 HTML 中的图标)
+>>>>>>> Stashed changes
             lucide.createIcons();
 
             /**
