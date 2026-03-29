@@ -1,218 +1,337 @@
 <!DOCTYPE html>
-<html lang="zh-CN" class="dark">
+<html lang="zh-CN" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>个人主页 | Portfolio</title>
+    <title>MieSheeeep | 个人主页</title>
     
-    <!-- 1. CDN: Tailwind CSS -->
+    <!-- Google Fonts 引入: Inter (Sans-serif) 与 Noto Serif SC (Serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- 2. CDN: Lucide Icons -->
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- Tailwind 配置 -->
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        serif: ['"Noto Serif SC"', 'ui-serif', 'Georgia', 'Cambria', 'serif'],
+                    },
                     colors: {
-                        darkBg: '#0f172a', /* Tailwind slate-900 风格基底 */
+                        // 采用 Anthropic / Claude 的经典暖暗色调配色板
+                        claude: {
+                            bg: '#141414',
+                            surface: '#1F1E1D',
+                            surfaceHover: '#2A2928',
+                            border: '#333130',
+                            text: '#D6D2CC',
+                            muted: '#8E8A85',
+                            accent: '#D97757', /* 标志性的柔和琥珀色/蜜桃色 */
+                            accentHover: '#E38859'
+                        }
                     }
                 }
             }
         }
     </script>
 
-    <!-- 玻璃拟态 (Glassmorphism) 核心样式 -->
     <style>
-        /* 深色渐变背景 */
         body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #000000 100%);
-            background-attachment: fixed;
-            color: #f8fafc;
-            min-height: 100vh;
-            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #141414; /* claude.bg */
+            color: #D6D2CC; /* claude.text */
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* 统一的玻璃态卡片样式 */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 1.5rem;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-        }
-
-        /* 悬停动画 */
-        .glass-card-hover:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            border-color: rgba(255, 255, 255, 0.15);
-        }
-
-        /* 隐藏滚动条但保留滚动功能 */
+        /* 隐藏滚动条但保留滚动效果 */
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: transparent;
+            background: #141414;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            background: #333130;
+            border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: #8E8A85;
+        }
+
+        /* 文字高亮颜色 */
+        ::selection {
+            background-color: rgba(217, 119, 87, 0.3);
+            color: #fff;
+        }
+
+        /* 滚动渐显动画 */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 毛玻璃导航栏（低调版） */
+        .nav-blur {
+            background: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+        .nav-blur.scrolled {
+            border-bottom: 1px solid #333130; /* claude.border */
         }
     </style>
 </head>
-<body class="antialiased selection:bg-blue-500/30">
+<body class="selection:bg-claude-accent/30 tracking-wide font-light">
+
+    <!-- 顶部导航 -->
+    <header id="navbar" class="fixed top-0 w-full z-50 nav-blur py-4 px-6 md:px-12 flex justify-between items-center">
+        <a href="#" class="font-serif text-lg font-medium tracking-wider text-claude-text hover:text-claude-accent transition-colors duration-300">
+            MieSheeeep.
+        </a>
+        <nav class="hidden md:flex gap-8 text-sm text-claude-muted">
+            <a href="#about" class="hover:text-claude-text transition-colors duration-300">About</a>
+            <a href="#projects" class="hover:text-claude-text transition-colors duration-300">Projects</a>
+            <a href="#writing" class="hover:text-claude-text transition-colors duration-300">Writing</a>
+        </nav>
+        <button class="md:hidden text-claude-muted hover:text-claude-text">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+    </header>
 
     <!-- 主容器 -->
-    <div class="max-w-6xl mx-auto p-4 md:p-8 min-h-screen flex flex-col justify-center">
+    <main class="max-w-4xl mx-auto px-6 md:px-12">
         
-        <!-- Bento Grid 布局 (网格系统) -->
-        <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-[minmax(200px,auto)]">
-            
-            <!-- 1. Hero Section (占 2列 x 2行) -->
-            <section class="glass-card col-span-1 md:col-span-2 lg:col-span-2 xl:col-span-2 row-span-2 p-8 md:p-12 flex flex-col justify-center relative overflow-hidden">
-                <!-- 装饰性光晕背景 -->
-                <div class="absolute -right-20 -top-20 w-80 h-80 bg-blue-500 rounded-full blur-[120px] opacity-30 pointer-events-none"></div>
-                <div class="absolute -left-10 -bottom-10 w-60 h-60 bg-purple-500 rounded-full blur-[100px] opacity-30 pointer-events-none"></div>
-                
-                <div class="z-10 relative">
-                    <div class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 mb-6 md:mb-8 flex items-center justify-center shadow-2xl overflow-hidden border-2 border-white/20">
-                        <img src="https://github.com/MieSheeeep.png" alt="MieSheeeep" class="w-full h-full object-cover">
-                    </div>
-                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 tracking-tight leading-tight">你好，我是 <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">MieSheeeep</span></h1>
-                    <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-blue-500/30 bg-blue-500/10 text-sm font-semibold text-blue-300 mb-8 backdrop-blur-md shadow-[0_0_15px_rgba(59,130,246,0.15)]">
-                        <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
-                        Full-stack Developer
-                    </div>
-                    <p class="text-gray-300 mb-10 max-w-lg leading-relaxed text-base md:text-lg">
-                        热爱构建优雅、高性能的现代 Web 应用。穿梭于设计与代码之间，探索技术的无限可能，致力于将复杂的问题转化为简单的解决方案。
-                    </p>
-                    
-                    <!-- 社交媒体图标 -->
-                    <div class="flex gap-4">
-                        <a href="https://github.com/MieSheeeep" target="_blank" class="p-3 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:-translate-y-1 transition-all text-gray-300 hover:text-white group">
-                            <i data-lucide="github" class="w-5 h-5 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all"></i>
-                        </a>
-                        <a href="https://twitter.com" target="_blank" class="p-3 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:-translate-y-1 transition-all text-gray-300 hover:text-white group">
-                            <i data-lucide="twitter" class="w-5 h-5 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all"></i>
-                        </a>
-                        <a href="mailto:hello@example.com" class="p-3 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:-translate-y-1 transition-all text-gray-300 hover:text-white group">
-                            <i data-lucide="mail" class="w-5 h-5 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all"></i>
-                        </a>
-                    </div>
+        <!-- 1. Hero 置顶区域 (全屏高度) -->
+        <section id="hero" class="min-h-screen flex flex-col justify-center relative reveal active">
+            <div class="space-y-6 md:space-y-8">
+                <!-- 标志性颜色点缀 -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-[1px] bg-claude-accent"></div>
+                    <span class="text-claude-accent font-medium text-sm tracking-widest uppercase">Software Engineer</span>
                 </div>
-            </section>
+                
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif font-medium leading-tight tracking-tight text-white">
+                    Crafting <br />
+                    <span class="text-claude-muted font-normal italic">intelligent</span> systems.
+                </h1>
+                
+                <p class="text-claude-muted text-lg md:text-xl max-w-2xl leading-relaxed mt-6">
+                    你好，我是 MieSheeeep。<br class="hidden md:block"/>
+                    我致力于将复杂的技术收敛于极致极简与优雅的交互之中，专注于全栈开发与智能化产品的探索。
+                </p>
 
-            <!-- 2. Project Section: 动态抓取 GitHub 项目 -->
-            <div id="github-projects-container" class="contents">
-                <div class="glass-card col-span-1 md:col-span-2 lg:col-span-2 xl:col-span-2 p-6 flex flex-col justify-center items-center text-gray-500 animate-pulse min-h-[200px]">
-                    <i data-lucide="loader-2" class="w-8 h-8 animate-spin mb-2 text-blue-400"></i>
-                    <span class="text-sm">加载项目中...</span>
+                <div class="pt-8 flex gap-6 items-center">
+                    <a href="#projects" class="group flex items-center gap-2 text-sm font-medium text-claude-text hover:text-claude-accent transition-colors duration-300 pb-1 border-b border-transparent hover:border-claude-accent">
+                        查看项目 <i data-lucide="arrow-down-right" class="w-4 h-4 group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform"></i>
+                    </a>
+                    <div class="flex items-center gap-4 text-claude-muted">
+                        <a href="https://github.com/MieSheeeep" target="_blank" class="hover:text-claude-text transition-colors"><i data-lucide="github" class="w-5 h-5"></i></a>
+                        <a href="mailto:hello@example.com" class="hover:text-claude-text transition-colors"><i data-lucide="mail" class="w-5 h-5"></i></a>
+                    </div>
                 </div>
             </div>
 
-            <!-- 3. Blog Section (占满可用列) -->
-            <section class="glass-card col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-4 p-6 md:p-8 flex flex-col">
-                <div class="flex items-center justify-between mb-8 pb-4 border-b border-white/10">
-                    <h2 class="text-2xl font-bold flex items-center gap-3">
-                        <i data-lucide="book-open" class="text-blue-400 w-6 h-6"></i> 
-                        文章与思考
-                    </h2>
-                    <a href="#" class="text-sm font-medium text-gray-400 hover:text-blue-400 flex items-center transition-colors">
-                        全部文章 <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
-                    </a>
+            <!-- 向下滚动提示 -->
+            <div class="absolute bottom-12 left-0 flex items-center gap-3 text-claude-muted text-xs tracking-widest uppercase opacity-60">
+                <div class="w-[1px] h-12 bg-claude-border overflow-hidden relative">
+                    <div class="absolute top-0 left-0 w-full h-1/2 bg-claude-accent animate-[scrolldown_2s_ease-in-out_infinite]"></div>
                 </div>
-                
-                <!-- 博客卡片容器 -->
-                <div id="blog-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- JS 动态渲染的博客卡片占位 -->
+                Scroll to explore
+            </div>
+        </section>
+
+        <!-- 2. 关于与理念 (About) -->
+        <section id="about" class="py-24 md:py-32 reveal">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div class="md:col-span-1">
+                    <h2 class="text-sm font-medium text-claude-muted tracking-widest uppercase">/ About Me</h2>
                 </div>
-            </section>
-        </main>
+                <div class="md:col-span-3 space-y-8 text-claude-text leading-relaxed text-base md:text-lg">
+                    <p>
+                        在数字世界中，我始终相信“美学（Aesthetics）”与“工程（Engineering）”是从不割裂的整体。优秀的代码应当如同优美的散文一般，结构清晰、逻辑严密，充满诗意。
+                    </p>
+                    <p>
+                        过去几年中，我深耕于 Web 架构与后端效能优化。从构建高并发的微服务系统，到打磨像素级完美的响应式前端界面，我享受创造带来的心流反馈。
+                    </p>
+                    <div class="pt-6 border-t border-claude-border mt-8 flex flex-col md:flex-row gap-8">
+                        <div>
+                            <h3 class="text-white font-serif text-lg mb-3">技术栈</h3>
+                            <ul class="text-claude-muted space-y-2 text-sm">
+                                <li>TypeScript / JavaScript</li>
+                                <li>React / Next.js / Vue</li>
+                                <li>Node.js / Go / Python</li>
+                                <li>Tailwind CSS / UI Design</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-serif text-lg mb-3">探索领域</h3>
+                            <ul class="text-claude-muted space-y-2 text-sm">
+                                <li>大模型(LLM) 应用层构建</li>
+                                <li>高并发后端架构</li>
+                                <li>人机交互设计 (HCI)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <footer class="mt-12 text-center text-sm text-gray-500 pb-8">
-            <p>&copy; <span id="year"></span> MieSheeeep. Built with Tailwind CSS & Vanilla JS.</p>
-        </footer>
-    </div>
+        <!-- 3. 精选项目 (Selected Projects) -->
+        <section id="projects" class="py-24 md:py-32 border-t border-claude-border reveal">
+            <div class="flex justify-between items-end mb-16">
+                <div>
+                    <h2 class="text-sm font-medium text-claude-muted tracking-widest uppercase mb-4">/ Projects</h2>
+                    <h3 class="text-3xl md:text-4xl font-serif text-white">开源与实践</h3>
+                </div>
+                <a href="https://github.com/MieSheeeep" target="_blank" class="hidden md:flex items-center gap-2 text-claude-muted hover:text-claude-accent transition-colors text-sm">
+                    View all on GitHub <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
 
-    <!-- 核心逻辑：数据解耦与渲染 -->
+            <!-- GitHub 动态抓取容器 -->
+            <div id="github-projects-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 加载骨架屏 -->
+                <div class="p-8 rounded-2xl bg-claude-surface border border-claude-border animate-pulse flex flex-col items-center justify-center min-h-[220px]">
+                    <i data-lucide="loader-2" class="w-6 h-6 animate-spin text-claude-muted mb-3"></i>
+                    <span class="text-sm text-claude-muted font-mono">Fetching latest works...</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. 文字与思考 (Writing) -->
+        <section id="writing" class="py-24 md:py-32 border-t border-claude-border reveal mb-20">
+            <h2 class="text-sm font-medium text-claude-muted tracking-widest uppercase mb-4">/ Writing</h2>
+            <h3 class="text-3xl md:text-4xl font-serif text-white mb-16">思考笔记</h3>
+
+            <!-- 极简文章列表表格风 -->
+            <div class="border-t border-claude-border" id="blog-container">
+                <!-- JS 渲染区 -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 底部 Footer -->
+    <footer class="border-t border-claude-border bg-claude-bg py-12 text-center relative z-10 transition-colors">
+        <div class="max-w-4xl mx-auto px-6 md:px-12 flex flex-col-reverse md:flex-row justify-between items-center gap-6">
+            <p class="text-claude-muted text-sm flex items-center gap-2">
+                &copy; <span id="year"></span> MieSheeeep. 
+            </p>
+            <div class="flex gap-6 text-sm text-claude-muted">
+                <a href="#" class="hover:text-claude-accent transition-colors">Twitter</a>
+                <a href="https://github.com/MieSheeeep" target="_blank" class="hover:text-claude-accent transition-colors">GitHub</a>
+                <a href="#" class="hover:text-claude-accent transition-colors">Email</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 动画与核心逻辑 -->
+    <style>
+        @keyframes scrolldown {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(200%); }
+        }
+    </style>
+
     <script>
-        // 设置页脚年份
+        // 1. 设置年份
         document.getElementById('year').textContent = new Date().getFullYear();
 
+        // 2. Navbar 滚动变色效果
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // 3. 元素滚动出现在视口的动画 (Intersection Observer)
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealConfig = {
+            threshold: 0.15, // 元素出现15%时触发
+            rootMargin: "0px 0px -50px 0px" // 稍微提前一点触发
+        };
+        const revealObserver = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // 动画只触发一次
+                }
+            });
+        }, revealConfig);
+        revealElements.forEach(el => revealObserver.observe(el));
+
         /**
-         * =========================================
-         * 1. 常量数据配置 (数据解耦)
-         * =========================================
+         * 4. 数据渲染逻辑: 博客文章
          */
         const BLOG_CONFIG = [
             {
                 id: "post-1",
-                title: "探索 React Server Components 的内部机制",
+                title: "对大模型驱动的下一个自然交互范式的探索",
                 url: "#",
-                date: "2023-10-15",
-                excerpt: "深入解析 RSC 是如何通过服务端流式渲染改变我们构建 React 应用的方式，以及对首屏加载的影响。",
-                tags: ["React", "Performance"]
+                date: "Aug 24, 2024",
+                readTime: "8 min read"
             },
             {
                 id: "post-2",
-                title: "CSS 架构：使用 Tailwind 快速落地方案",
+                title: "论系统架构设计中的『克制』与『折衷』",
                 url: "#",
-                date: "2023-11-02",
-                excerpt: "不再写冗长的 CSS 类名。本文分享在使用 Tailwind CSS 时如何保持组件的整洁，兼顾开发效率和代码质量。",
-                tags: ["CSS", "架构"]
+                date: "Nov 02, 2023",
+                readTime: "12 min read"
             },
             {
                 id: "post-3",
-                title: "JavaScript 的未来展望与新特性",
+                title: "为什么我们最终都需要回归单体应用（Monolith）？",
                 url: "#",
-                date: "2023-12-10",
-                excerpt: "盘点即将到来的 ECMAScript 提案，如 Temporal API、Records 和 Tuples，了解它们将如何影响日常开发。",
-                tags: ["JavaScript", "ECMAScript"]
+                date: "Dec 10, 2023",
+                readTime: "5 min read"
             }
         ];
 
-        /**
-         * =========================================
-         * 2. 渲染博客核心函数
-         * =========================================
-         */
         function renderBlogs(data) {
             const container = document.getElementById('blog-container');
             if (!container) return;
 
             if (!data || data.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center text-gray-500 py-8">暂无文章</div>`;
+                container.innerHTML = `<div class="py-8 text-claude-muted text-sm border-b border-claude-border">暂无文章沉淀</div>`;
                 return;
             }
 
             const html = data.map(post => {
-                const tagsHtml = post.tags.map(tag => 
-                    `<span class="text-[10px] uppercase tracking-wider px-2 py-1 rounded border border-white/5 bg-white/5 text-gray-400">${tag}</span>`
-                ).join('');
-
+                // Claude 极简风格列表：没有卡片框，只有线条、时间与标题
                 return `
-                    <a href="${post.url}" class="group block p-5 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-white/20 transition-all duration-300 relative overflow-hidden">
-                        <div class="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/0 to-blue-500/0 group-hover:from-blue-500/5 transition-all duration-500"></div>
-                        <div class="relative z-10">
-                            <div class="flex items-center text-xs text-gray-500 mb-3 font-mono">
-                                <i data-lucide="calendar" class="w-3 h-3 mr-1"></i>
-                                ${post.date}
-                            </div>
-                            <h3 class="text-lg font-bold mb-2 text-gray-200 group-hover:text-blue-400 transition-colors line-clamp-2">${post.title}</h3>
-                            <p class="text-sm text-gray-400 mb-5 line-clamp-2 leading-relaxed">${post.excerpt}</p>
-                            <div class="flex flex-wrap gap-2 mt-auto">
-                                ${tagsHtml}
-                            </div>
+                    <a href="${post.url}" class="group block flex flex-col md:flex-row md:items-center py-6 border-b border-claude-border hover:bg-claude-surface/30 px-4 -mx-4 rounded-xl transition-all duration-300">
+                        <div class="md:w-32 flex-shrink-0 text-sm text-claude-muted font-mono mb-2 md:mb-0">
+                            ${post.date}
+                        </div>
+                        <div class="flex-grow">
+                            <h4 class="text-lg text-claude-text group-hover:text-claude-accent transition-colors font-medium">
+                                ${post.title}
+                            </h4>
+                        </div>
+                        <div class="flex-shrink-0 text-sm pl-0 md:pl-4 mt-2 md:mt-0 text-claude-muted/50 hidden md:block">
+                            ${post.readTime}
+                        </div>
+                        <div class="flex-shrink-0 text-claude-muted pl-4 opacity-0 group-hover:opacity-100 transition-opacity -translate-x-2 group-hover:translate-x-0 hidden md:block">
+                            <i data-lucide="arrow-right" class="w-5 h-5"></i>
                         </div>
                     </a>
                 `;
@@ -222,105 +341,72 @@
         }
 
         /**
-         * =========================================
-         * 3. 动态抓取 GitHub 项目
-         * =========================================
+         * 5. 动态抓取 GitHub 项目
          */
         async function fetchGitHubProjects(username) {
             const container = document.getElementById('github-projects-container');
             if (!container) return;
 
-            try {
-                // Fetch public repos, sorted by updated
-                const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`);
-                if (!res.ok) throw new Error('Failed to fetch repos');
-                
-                const repos = await res.json();
-                
-                const topRepos = repos.filter(repo => !repo.fork).slice(0, 3);
-                
-                if (topRepos.length === 0) {
-                    container.innerHTML = `<div class="glass-card col-span-1 p-6 flex items-center justify-center text-gray-500">暂无开源项目</div>`;
-                    return;
-                }
-
-                // Render styles: specific colors for different index
-                const styles = [
-                    { 
-                        icon: 'code-2', 
-                        colorClass: 'text-indigo-400',
-                        bgClass: 'bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border-indigo-500/20',
-                        hoverClass: 'group-hover:text-indigo-400 group-hover:bg-indigo-500/20'
-                    },
-                    { 
-                        icon: 'database', 
-                        colorClass: 'text-emerald-400',
-                        bgClass: 'bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border-emerald-500/20',
-                        hoverClass: 'group-hover:text-emerald-400 group-hover:bg-emerald-500/20'
-                    },
-                    { 
-                        icon: 'star', 
-                        extraClasses: 'md:col-span-2 lg:col-span-2 xl:col-span-2 relative overflow-hidden', 
-                        extraHTML: `<div class="absolute right-0 top-0 w-32 h-32 bg-rose-500/10 blur-[50px] rounded-full pointer-events-none group-hover:bg-rose-500/20 transition-all duration-500"></div>`,
-                        colorClass: 'text-rose-400',
-                        bgClass: 'bg-gradient-to-br from-rose-500/20 to-orange-500/20 border-rose-500/20',
-                        hoverClass: 'group-hover:text-rose-400 group-hover:bg-rose-500/20'
-                    }
-                ];
-
-                const html = topRepos.map((repo, index) => {
-                    const style = styles[index % styles.length];
-                    const extraClasses = style.extraClasses || 'col-span-1';
-                    const langHtml = repo.language ? `<span class="text-xs font-mono text-gray-500">${repo.language}</span>` : '';
+            // 稍微延长假加载时间为了动画美感 (生产环境可去掉setTimeout)
+            setTimeout(async () => {
+                try {
+                    const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`);
+                    if (!res.ok) throw new Error('Failed to fetch');
                     
-                    return `
-                    <a href="${repo.html_url}" target="_blank" class="glass-card glass-card-hover ${extraClasses} p-6 flex flex-col justify-between group">
-                        ${style.extraHTML || ''}
-                        <div class="z-10">
-                            <div class="w-12 h-12 rounded-xl ${style.bgClass} border flex items-center justify-center mb-5 ${style.colorClass}">
-                                <i data-lucide="${style.icon}" class="w-6 h-6"></i>
+                    const repos = await res.json();
+                    
+                    // 过滤 fork，取前 4 个
+                    const topRepos = repos.filter(repo => !repo.fork).slice(0, 4);
+                    
+                    if (topRepos.length === 0) {
+                        container.innerHTML = `<div class="col-span-full py-12 text-center text-claude-muted">Repository is empty.</div>`;
+                        return;
+                    }
+
+                    // 渲染项目：去除高亮的背景，采用类首选项的高级圆角平滑卡片
+                    const html = topRepos.map((repo) => {
+                        return `
+                        <a href="${repo.html_url}" target="_blank" class="group relative flex flex-col justify-between p-8 rounded-2xl bg-claude-surface border border-claude-border hover:border-claude-accent/50 hover:bg-claude-surfaceHover transition-all duration-500 overflow-hidden">
+                            <!-- 聚焦遮罩增强质感 -->
+                            <div class="absolute inset-0 bg-gradient-to-br from-claude-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            
+                            <div class="relative z-10">
+                                <div class="flex justify-between items-start mb-4">
+                                    <i data-lucide="folder-code" class="w-8 h-8 text-claude-muted group-hover:text-claude-accent transition-colors duration-300"></i>
+                                    <i data-lucide="arrow-up-right" class="w-5 h-5 text-claude-border group-hover:text-claude-accent transition-colors duration-300"></i>
+                                </div>
+                                <h3 class="text-xl font-serif text-white mb-3 group-hover:text-claude-accent transition-colors duration-300">${repo.name}</h3>
+                                <p class="text-sm text-claude-muted leading-relaxed line-clamp-3 mb-6">${repo.description || '暂无详细描述信息。'}</p>
                             </div>
-                            <h3 class="text-xl font-bold mb-2 group-hover:text-white transition-colors">${repo.name}</h3>
-                            <p class="text-sm text-gray-400 line-clamp-2 mb-4">${repo.description || '暂无描述'}</p>
-                        </div>
-                        <div class="flex justify-between items-center mt-2 z-10">
-                            <div class="flex gap-2 items-center">
-                                ${langHtml}
-                                <span class="text-xs font-mono text-gray-500 flex items-center gap-1"><i data-lucide="star" class="w-3 h-3"></i> ${repo.stargazers_count}</span>
+                            
+                            <div class="relative z-10 flex justify-between items-center pt-4 border-t border-claude-border/50">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-claude-muted group-hover:bg-claude-accent transition-colors"></span>
+                                    <span class="text-xs text-claude-muted">${repo.language || 'Markdown'}</span>
+                                </div>
+                                <span class="text-xs text-claude-muted flex items-center gap-1">
+                                    <i data-lucide="star" class="w-3.5 h-3.5"></i> ${repo.stargazers_count}
+                                </span>
                             </div>
-                            <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition-colors ${style.hoverClass.split(' ')[1]}">
-                                <i data-lucide="arrow-up-right" class="w-4 h-4 text-gray-400 ${style.hoverClass.split(' ')[0]} transition-colors"></i>
-                            </div>
-                        </div>
-                    </a>
-                    `;
-                }).join('');
-                
-                container.innerHTML = html;
-                
-            } catch (err) {
-                console.error(err);
-                container.innerHTML = `<div class="glass-card col-span-1 p-6 flex items-center justify-center text-red-400">加载项目失败</div>`;
-            }
+                        </a>
+                        `;
+                    }).join('');
+                    
+                    container.innerHTML = html;
+                    lucide.createIcons();
+                    
+                } catch (err) {
+                    console.error(err);
+                    container.innerHTML = `<div class="col-span-full py-12 text-center text-claude-muted">Failed to load from GitHub.<br/>${err.message}</div>`;
+                }
+            }, 800);
         }
 
-        /**
-         * =========================================
-         * 4. 初始化与生命周期
-         * =========================================
-         */
+        // 6. 初始化
         document.addEventListener('DOMContentLoaded', () => {
-            // 1) 初始渲染静态博客数据
             renderBlogs(BLOG_CONFIG);
-
-            // 2) 获取并渲染 GitHub 项目
-            fetchGitHubProjects('MieSheeeep').then(() => {
-                // 等待 DOM 插入后再次初始化新增的图标
-                lucide.createIcons();
-            });
-
-            // 3) 初始化图标体系
             lucide.createIcons();
+            fetchGitHubProjects('MieSheeeep');
         });
     </script>
 </body>
