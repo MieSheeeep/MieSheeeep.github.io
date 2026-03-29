@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人主页 | Portfolio</title>
+
+    <!-- 1. CDN: Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 2. CDN: Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0f172a', /* Tailwind slate-900 风格基底 */
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- 玻璃拟态 (Glassmorphism) 核心样式 -->
+    <style>
+        /* 深色渐变背景 */
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #000000 100%);
+            background-attachment: fixed;
+            color: #f8fafc;
+            min-height: 100vh;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        /* 统一的玻璃态卡片样式 */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* 悬停动画 */
+        .glass-card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* 隐藏滚动条但保留滚动功能 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-blue-500/30">
+
+    <!-- 主容器 -->
+    <div class="max-w-6xl mx-auto p-4 md:p-8 min-h-screen flex flex-col justify-center">
+
+        <!-- Bento Grid 布局 (网格系统) -->
+        <main class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-[minmax(180px,auto)]">
+
+            <!-- 1. Hero Section (占 2列 x 2行) -->
+            <section
+                class="glass-card col-span-1 md:col-span-2 lg:col-span-2 row-span-2 p-8 flex flex-col justify-center relative overflow-hidden">
+                <!-- 装饰性光晕背景 -->
+                <div
+                    class="absolute -right-20 -top-20 w-64 h-64 bg-blue-500 rounded-full blur-[100px] opacity-20 pointer-events-none">
+                </div>
+                <div
+                    class="absolute -left-10 -bottom-10 w-40 h-40 bg-purple-500 rounded-full blur-[80px] opacity-20 pointer-events-none">
+                </div>
+
+                <div class="z-10 relative">
+                    <div
+                        class="w-16 h-16 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 mb-6 flex items-center justify-center shadow-lg">
+                        <i data-lucide="user" class="text-white w-8 h-8"></i>
+                    </div>
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">你好，我是 <br /><span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Your
+                            Name</span></h1>
+                    <div
+                        class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-blue-500/30 bg-blue-500/10 text-sm font-semibold text-blue-300 mb-6 backdrop-blur-md">
+                        <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+                        Full-stack Developer
+                    </div>
+                    <p class="text-gray-400 mb-8 max-w-sm leading-relaxed">
+                        热爱构建优雅、高性能的现代 Web 应用。穿梭于设计与代码之间，探索技术的无限可能。
+                    </p>
+
+                    <!-- 社交媒体图标 -->
+                    <div class="flex gap-4">
+                        <a href="https://github.com" target="_blank"
+                            class="p-3 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:-translate-y-1 transition-all text-gray-300 hover:text-white group">
+                            <i data-lucide="github"
+                                class="w-5 h-5 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all"></i>
+                        </a>
+                        <a href="https://twitter.com" target="_blank"
+                            class="p-3 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:-translate-y-1 transition-all text-gray-300 hover:text-white group">
+                            <i data-lucide="twitter"
+                                class="w-5 h-5 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all"></i>
+                        </a>
+                        <a href="mailto:hello@example.com"
+                            class="p-3 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:-translate-y-1 transition-all text-gray-300 hover:text-white group">
+                            <i data-lucide="mail"
+                                class="w-5 h-5 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Project Section: 项目 1 -->
+            <a href="#" target="_blank"
+                class="glass-card glass-card-hover col-span-1 p-6 flex flex-col justify-between group">
+                <div>
+                    <div
+                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/20 flex items-center justify-center mb-5 text-indigo-400">
+                        <i data-lucide="code-2" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 group-hover:text-indigo-400 transition-colors">Project Alpha</h3>
+                    <p class="text-sm text-gray-400 line-clamp-2">基于 Next.js 14 和 Tailwind 构建的超快速响应式电子商务平台系统。</p>
+                </div>
+                <div class="flex justify-between items-center mt-6">
+                    <span class="text-xs font-mono text-gray-500">React · Next.js</span>
+                    <div
+                        class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-indigo-500/20 transition-colors">
+                        <i data-lucide="arrow-up-right"
+                            class="w-4 h-4 text-gray-400 group-hover:text-indigo-400 transition-colors"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 2. Project Section: 项目 2 -->
+            <a href="#" target="_blank"
+                class="glass-card glass-card-hover col-span-1 p-6 flex flex-col justify-between group">
+                <div>
+                    <div
+                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/20 flex items-center justify-center mb-5 text-emerald-400">
+                        <i data-lucide="database" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 group-hover:text-emerald-400 transition-colors">API Gateway</h3>
+                    <p class="text-sm text-gray-400 line-clamp-2">使用 Go 编写的高并发流媒体 API 网关，支持微服务路由分发。</p>
+                </div>
+                <div class="flex justify-between items-center mt-6">
+                    <span class="text-xs font-mono text-gray-500">Golang · Redis</span>
+                    <div
+                        class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-emerald-500/20 transition-colors">
+                        <i data-lucide="arrow-up-right"
+                            class="w-4 h-4 text-gray-400 group-hover:text-emerald-400 transition-colors"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 2. Project Section: 项目 3 -->
+            <a href="#" target="_blank"
+                class="glass-card glass-card-hover col-span-1 md:col-span-2 lg:col-span-2 p-6 flex flex-col justify-between group relative overflow-hidden">
+                <div
+                    class="absolute right-0 top-0 w-32 h-32 bg-rose-500/10 blur-[50px] rounded-full pointer-events-none group-hover:bg-rose-500/20 transition-all duration-500">
+                </div>
+                <div class="z-10">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-rose-500/20 to-orange-500/20 border border-rose-500/20 flex items-center justify-center mb-5 text-rose-400">
+                        <i data-lucide="palette" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 group-hover:text-rose-400 transition-colors">Glassmorphism UI Kit
+                    </h3>
+                    <p class="text-md text-gray-400 max-w-sm mb-4">
+                        一套开源的 React 玻璃拟态组件库，帮助开发者快速构建现代化视觉界面。内置主题引擎和物理动效。
+                    </p>
+                </div>
+                <div class="flex justify-between items-end z-10 mt-2">
+                    <div class="flex gap-2">
+                        <span
+                            class="text-xs px-2 py-1 rounded-md bg-white/5 border border-white/10 text-gray-300">React</span>
+                        <span
+                            class="text-xs px-2 py-1 rounded-md bg-white/5 border border-white/10 text-gray-300">Framer
+                            Motion</span>
+                    </div>
+                    <div
+                        class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-rose-500/20 transition-colors">
+                        <i data-lucide="github"
+                            class="w-4 h-4 text-gray-400 group-hover:text-rose-400 transition-colors"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 3. Blog Section (占满可用列) -->
+            <section class="glass-card col-span-1 md:col-span-3 lg:col-span-4 p-6 md:p-8 flex flex-col">
+                <div class="flex items-center justify-between mb-8 pb-4 border-b border-white/10">
+                    <h2 class="text-2xl font-bold flex items-center gap-3">
+                        <i data-lucide="book-open" class="text-blue-400 w-6 h-6"></i>
+                        文章与思考
+                    </h2>
+                    <a href="#"
+                        class="text-sm font-medium text-gray-400 hover:text-blue-400 flex items-center transition-colors">
+                        全部文章 <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                    </a>
+                </div>
+
+                <!-- 博客卡片容器 -->
+                <div id="blog-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- JS 动态渲染的博客卡片占位 -->
+                </div>
+            </section>
+        </main>
+
+        <footer class="mt-12 text-center text-sm text-gray-500 pb-8">
+            <p>&copy; <span id="year"></span> Your Name. Built with Tailwind CSS & Vanilla JS.</p>
+        </footer>
+    </div>
+
+    <!-- 核心逻辑：数据解耦与渲染 -->
+    <script>
+        // 设置页脚年份
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        /**
+         * =========================================
+         * 1. 常量数据配置 (数据解耦)
+         * =========================================
+         */
+        const BLOG_CONFIG = [
+            {
+                id: "post-1",
+                title: "探索 React Server Components 的内部机制",
+                url: "#",
+                date: "2023-10-15",
+                excerpt: "深入解析 RSC 是如何通过服务端流式渲染改变我们构建 React 应用的方式，以及对首屏加载的影响。",
+                tags: ["React", "Performance"]
+            },
+            {
+                id: "post-2",
+                title: "CSS 架构：使用 Tailwind 快速落地方案",
+                url: "#",
+                date: "2023-11-02",
+                excerpt: "不再写冗长的 CSS 类名。本文分享在使用 Tailwind CSS 时如何保持组件的整洁，兼顾开发效率和代码质量。",
+                tags: ["CSS", "架构"]
+            },
+            {
+                id: "post-3",
+                title: "JavaScript 的未来展望与新特性",
+                url: "#",
+                date: "2023-12-10",
+                excerpt: "盘点即将到来的 ECMAScript 提案，如 Temporal API、Records 和 Tuples，了解它们将如何影响日常开发。",
+                tags: ["JavaScript", "ECMAScript"]
+            }
+        ];
+
+        /**
+         * =========================================
+         * 2. 渲染核心函数
+         * =========================================
+         * @param {Array} data - 博客数据数组
+         */
+        function renderBlogs(data) {
+            const container = document.getElementById('blog-container');
+            if (!container) return;
+
+            // 如果没有数据
+            if (!data || data.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center text-gray-500 py-8">暂无文章</div>`;
+                return;
+            }
+
+            // 纯原生 JS 组装 HTML 字符串
+            const html = data.map(post => {
+                const tagsHtml = post.tags.map(tag =>
+                    `<span class="text-[10px] uppercase tracking-wider px-2 py-1 rounded border border-white/5 bg-white/5 text-gray-400">${tag}</span>`
+                ).join('');
+
+                return `
+                    <a href="${post.url}" class="group block p-5 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-white/20 transition-all duration-300 relative overflow-hidden">
+                        <!-- 发光悬停特效 -->
+                        <div class="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/0 to-blue-500/0 group-hover:from-blue-500/5 transition-all duration-500"></div>
+                        
+                        <div class="relative z-10">
+                            <div class="flex items-center text-xs text-gray-500 mb-3 font-mono">
+                                <i data-lucide="calendar" class="w-3 h-3 mr-1"></i>
+                                ${post.date}
+                            </div>
+                            <h3 class="text-lg font-bold mb-2 text-gray-200 group-hover:text-blue-400 transition-colors line-clamp-2">${post.title}</h3>
+                            <p class="text-sm text-gray-400 mb-5 line-clamp-2 leading-relaxed">${post.excerpt}</p>
+                            <div class="flex flex-wrap gap-2 mt-auto">
+                                ${tagsHtml}
+                            </div>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+
+            // 更新 DOM
+            container.innerHTML = html;
+        }
+
+        /**
+         * =========================================
+         * 3. 初始化与生命周期
+         * =========================================
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // 1) 初始渲染静态博客数据
+            renderBlogs(BLOG_CONFIG);
+
+            // 2) 初始化图标体系
+            lucide.createIcons();
+
+            /**
+             * =========================================
+             * 4. 预留接口：异步数据加载 (从 linuxdo_posts.json)
+             * =========================================
+             * 
+             * 解开下方注释即可通过 Fetch 抓取数据并覆盖静态渲染
+             */
+
+            /*
+            async function fetchAndRenderAsyncBlogs() {
+                try {
+                    // 读取同目录下的 JSON 文件
+                    const response = await fetch('./linuxdo_posts.json');
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const jsonData = await response.json();
+                    
+                    // 利用请求回来的数据重新渲染
+                    renderBlogs(jsonData);
+
+                    // 重新执行图标初始化（如果渲染产生的 DOM 包含 <i data-lucide="...">）
+                    lucide.createIcons();
+
+                } catch (error) {
+                    console.error('Failed to load blog posts from linuxdo_posts.json:', error);
+                    // 加载失败时静默或作提示，当前页面依旧保留静态配置的内容
+                }
+            }
+            
+            // 执行异步获取
+            fetchAndRenderAsyncBlogs();
+            */
+        });
+    </script>
+</body>
+
+</html>
