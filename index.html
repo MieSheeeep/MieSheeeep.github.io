@@ -55,6 +55,7 @@
             --scrollbar-thumb: #333130;
             --heading: #ffffff;
         }
+
         html:not(.dark) {
             --bg: #FAFAF8;
             --surface: #FFFFFF;
@@ -79,61 +80,146 @@
         }
 
         /* 链接和可交互元素也隐藏系统光标 */
-        a, button, input, textarea, select, [role="button"] { cursor: none; }
+        a,
+        button,
+        input,
+        textarea,
+        select,
+        [role="button"] {
+            cursor: none;
+        }
 
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
-        ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--muted);
+        }
 
         ::selection {
             background-color: rgba(217, 119, 87, 0.3);
             color: #fff;
         }
 
-        /* ===== 自定义光标 ===== */
+        /* ===== 自定义光标与特效 ===== */
         .cursor-dot {
             position: fixed;
             top: 0;
             left: 0;
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             background: #D97757;
+            box-shadow: 0 0 8px rgba(217, 119, 87, 0.6);
             border-radius: 50%;
             pointer-events: none;
             z-index: 9999;
             transform: translate(-50%, -50%);
-            transition: width 0.2s, height 0.2s, background 0.2s;
+            transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), height 0.3s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s;
         }
+
         .cursor-ring {
             position: fixed;
             top: 0;
             left: 0;
-            width: 36px;
-            height: 36px;
-            border: 1.5px solid rgba(217, 119, 87, 0.5);
+            width: 44px;
+            height: 44px;
+            border: 1px solid rgba(217, 119, 87, 0.5);
+            background: rgba(217, 119, 87, 0.05);
+            backdrop-filter: blur(1px);
+            -webkit-backdrop-filter: blur(1px);
             border-radius: 50%;
             pointer-events: none;
             z-index: 9998;
             transform: translate(-50%, -50%);
-            transition: width 0.25s, height 0.25s, border-color 0.25s, background 0.25s;
+            transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), height 0.3s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s, background-color 0.3s, transform 0.15s ease-out;
         }
+
         .cursor-dot.hover {
-            width: 12px;
-            height: 12px;
-            background: rgba(217, 119, 87, 0.8);
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
         }
+
         .cursor-ring.hover {
-            width: 50px;
-            height: 50px;
-            border-color: rgba(217, 119, 87, 0.3);
-            background: rgba(217, 119, 87, 0.05);
+            width: 58px;
+            height: 58px;
+            border-color: rgba(217, 119, 87, 0.6);
+            background: rgba(217, 119, 87, 0.15);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+        }
+
+        .cursor-ring.clicking {
+            transform: translate(-50%, -50%) scale(0.8) !important;
+            background: rgba(217, 119, 87, 0.3);
+            border-color: rgba(217, 119, 87, 0.8);
+        }
+
+        /* ===== 点击波纹与粒子 ===== */
+        .click-ripple {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid rgba(217, 119, 87, 0.8);
+            pointer-events: none;
+            z-index: 9997;
+            transform: translate(-50%, -50%);
+            animation: rippleAnim 0.6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+        }
+
+        @keyframes rippleAnim {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+                border-width: 2px;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(4);
+                opacity: 0;
+                border-width: 0;
+            }
+        }
+
+        .click-particle {
+            position: fixed;
+            width: 5px;
+            height: 5px;
+            background: rgba(217, 119, 87, 0.8);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9997;
         }
 
         /* 移动端隐藏自定义光标 */
         @media (pointer: coarse) {
-            .cursor-dot, .cursor-ring { display: none; }
-            body, a, button, input, textarea, select, [role="button"] { cursor: auto; }
+
+            .cursor-dot,
+            .cursor-ring {
+                display: none;
+            }
+
+            body,
+            a,
+            button,
+            input,
+            textarea,
+            select,
+            [role="button"] {
+                cursor: auto;
+            }
         }
 
         .reveal {
@@ -141,6 +227,7 @@
             transform: translateY(30px);
             transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
         }
+
         .reveal.active {
             opacity: 1;
             transform: translateY(0);
@@ -153,6 +240,7 @@
             border-bottom: 1px solid transparent;
             transition: border-color 0.3s ease, background 0.4s ease;
         }
+
         .nav-blur.scrolled {
             border-bottom: 1px solid var(--border);
         }
@@ -162,6 +250,7 @@
             overflow: hidden;
             transition: max-height 0.3s ease;
         }
+
         .mobile-menu.open {
             max-height: 300px;
         }
@@ -179,17 +268,32 @@
             color: var(--text);
             transition: all 0.3s;
         }
+
         .award-tag:hover {
             border-color: rgba(217, 119, 87, 0.5);
             background: var(--surface-hover);
         }
-        .award-level-1 { color: #F59E0B; }
-        .award-level-2 { color: #D97757; }
-        .award-level-3 { color: #8E8A85; }
+
+        .award-level-1 {
+            color: #F59E0B;
+        }
+
+        .award-level-2 {
+            color: #D97757;
+        }
+
+        .award-level-3 {
+            color: #8E8A85;
+        }
 
         @keyframes scrolldown {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(200%); }
+            0% {
+                transform: translateY(-100%);
+            }
+
+            100% {
+                transform: translateY(200%);
+            }
         }
 
         /* 时间线 */
@@ -197,6 +301,7 @@
             position: relative;
             padding-left: 28px;
         }
+
         .timeline-item::before {
             content: '';
             position: absolute;
@@ -207,6 +312,7 @@
             border-radius: 50%;
             background: #D97757;
         }
+
         .timeline-item::after {
             content: '';
             position: absolute;
@@ -216,6 +322,7 @@
             height: calc(100% - 8px);
             background: var(--border);
         }
+
         .timeline-item:last-child::after {
             display: none;
         }
@@ -226,6 +333,7 @@
             width: 20px;
             height: 20px;
         }
+
         .theme-toggle svg {
             position: absolute;
             inset: 0;
@@ -238,12 +346,18 @@
         }
 
         /* 全局过渡 */
-        *, *::before, *::after {
-            transition-property: background-color, border-color, color;
+        *,
+        *::before,
+        *::after {
+            transition-property: background-color, border-color, color, fill, stroke;
             transition-duration: 0s;
         }
-        html.theme-transitioning *, html.theme-transitioning *::before, html.theme-transitioning *::after {
-            transition-duration: 0.4s;
+
+        html.theme-transitioning *,
+        html.theme-transitioning *::before,
+        html.theme-transitioning *::after {
+            transition-duration: 0.5s;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
         }
     </style>
 </head>
@@ -267,16 +381,22 @@
                     <a href="#awards" class="hover:text-claude-text transition-colors duration-300">Awards</a>
                     <a href="#projects" class="hover:text-claude-text transition-colors duration-300">Projects</a>
                     <a href="#blog" class="hover:text-claude-text transition-colors duration-300">Blog</a>
-                </nav>
-                <button id="theme-toggle" class="text-claude-muted hover:text-claude-accent transition-colors" aria-label="Toggle theme">
-                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
-                    <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+                </nav>relative w-6 h-6 flex items-center justify-center text-claude-muted hover:text-claude-accent
+                transition-colors" aria-label="Toggle theme">
+                <i data-lucide="sun"
+                    class="absolute w-5 h-5 transition-transform duration-500 scale-0 -rotate-90 dark:scale-100 dark:rotate-0"></i>
+                <i data-lucide="moon" class="absolute w-5 h-5 transition-transform duration-500 scale-100 rotate-0 dark:scale-0 dark:rotate-90></i>
+                    <i data-lucide=" moon" class="w-5 h-5 block dark:hidden"></i>
                 </button>
             </div>
             <div class="flex md:hidden items-center gap-4">
-                <button id="theme-toggle-mobile" class="text-claude-muted hover:text-claude-accent transition-colors" aria-label="Toggle theme">
-                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
-                    <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+                <button id="theme-toggle-mobile"
+                    class="relative w-6 h-6 flex items-center justify-center text-claude-muted hover:text-claude-accent transition-colors"
+                    aria-label="Toggle theme">
+                    <i data-lucide="sun"
+                        class="absolute w-5 h-5 transition-transform duration-500 scale-0 -rotate-90 dark:scale-100 dark:rotate-0"></i>
+                    <i data-lucide="moon"
+                        class="absolute w-5 h-5 transition-transform duration-500 scale-100 rotate-0 dark:scale-0 dark:rotate-90"></i>
                 </button>
                 <button id="menu-btn" class="text-claude-muted hover:text-claude-text">
                     <i data-lucide="menu" class="w-5 h-5"></i>
@@ -302,16 +422,18 @@
             <div class="space-y-6 md:space-y-8">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-[1px] bg-claude-accent"></div>
-                    <span class="text-claude-accent font-medium text-sm tracking-widest uppercase">Machine Learning</span>
+                    <span class="text-claude-accent font-medium text-sm tracking-widest uppercase">Machine
+                        Learning</span>
                 </div>
 
-                <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif font-medium leading-tight tracking-tight text-white">
+                <h1
+                    class="text-5xl md:text-7xl lg:text-8xl font-serif font-medium leading-tight tracking-tight text-white">
                     Exploring <br />
                     <span class="text-claude-muted font-normal italic">intelligent</span> frontiers.
                 </h1>
 
                 <p class="text-claude-muted text-lg md:text-xl max-w-2xl leading-relaxed mt-6">
-                    你好，我是 MieSheeeep。<br class="hidden md:block" />
+                    你好，我是 王智洋。<br class="hidden md:block" />
                     福州大学计算机学院在读，专注于机器学习与深度学习研究。<br />
                     热衷于探索 AI 的边界，从理论到实践，从复现到创新。
                 </p>
@@ -329,16 +451,20 @@
                     </a>
                     <div class="flex items-center gap-4 text-claude-muted">
                         <a href="https://github.com/MieSheeeep" target="_blank"
-                            class="hover:text-claude-text transition-colors"><i data-lucide="github" class="w-5 h-5"></i></a>
+                            class="hover:text-claude-text transition-colors"><i data-lucide="github"
+                                class="w-5 h-5"></i></a>
                         <a href="mailto:3224782312@qq.com" class="hover:text-claude-text transition-colors"><i
                                 data-lucide="mail" class="w-5 h-5"></i></a>
                     </div>
                 </div>
             </div>
 
-            <div class="absolute bottom-12 left-0 flex items-center gap-3 text-claude-muted text-xs tracking-widest uppercase opacity-60">
+            <div
+                class="absolute bottom-12 left-0 flex items-center gap-3 text-claude-muted text-xs tracking-widest uppercase opacity-60">
                 <div class="w-[1px] h-12 bg-claude-border overflow-hidden relative">
-                    <div class="absolute top-0 left-0 w-full h-1/2 bg-claude-accent animate-[scrolldown_2s_ease-in-out_infinite]"></div>
+                    <div
+                        class="absolute top-0 left-0 w-full h-1/2 bg-claude-accent animate-[scrolldown_2s_ease-in-out_infinite]">
+                    </div>
                 </div>
                 Scroll to explore
             </div>
@@ -355,7 +481,8 @@
                         我是一名福州大学大二学生，对机器学习与人工智能充满热情。从 CS231n 的系统学习，到 GPT-2 的从零复现，我始终相信 —— 理解原理、动手实践，才是掌握 AI 最扎实的路径。
                     </p>
                     <p>
-                        目前我是<span class="text-claude-accent font-medium">福州大学西二在线工作室 AI 方向正式成员</span>，同时也是<span class="text-claude-accent font-medium">福州大学 ACM 服务外包实验室成员</span>。在团队中参与多个 AI 相关项目的研发与竞赛实践。
+                        目前我是<span class="text-claude-accent font-medium">福州大学西二在线工作室 AI 方向正式成员</span>，同时也是<span
+                            class="text-claude-accent font-medium">福州大学 ACM 服务外包实验室成员</span>。在团队中参与多个 AI 相关项目的研发与竞赛实践。
                     </p>
 
                     <!-- 经历时间线 -->
@@ -458,7 +585,8 @@
             </div>
 
             <div id="github-projects-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="p-8 rounded-2xl bg-claude-surface border border-claude-border animate-pulse flex flex-col items-center justify-center min-h-[220px]">
+                <div
+                    class="p-8 rounded-2xl bg-claude-surface border border-claude-border animate-pulse flex flex-col items-center justify-center min-h-[220px]">
                     <i data-lucide="loader-2" class="w-6 h-6 animate-spin text-claude-muted mb-3"></i>
                     <span class="text-sm text-claude-muted font-mono">Fetching latest works...</span>
                 </div>
@@ -486,12 +614,14 @@
 
     <!-- Footer -->
     <footer class="border-t border-claude-border bg-claude-bg py-12 text-center relative z-10">
-        <div class="max-w-4xl mx-auto px-6 md:px-12 flex flex-col-reverse md:flex-row justify-between items-center gap-6">
+        <div
+            class="max-w-4xl mx-auto px-6 md:px-12 flex flex-col-reverse md:flex-row justify-between items-center gap-6">
             <p class="text-claude-muted text-sm flex items-center gap-2">
                 &copy; <span id="year"></span> MieSheeeep. Built with passion for ML.
             </p>
             <div class="flex gap-6 text-sm text-claude-muted">
-                <a href="https://github.com/MieSheeeep" target="_blank" class="hover:text-claude-accent transition-colors">GitHub</a>
+                <a href="https://github.com/MieSheeeep" target="_blank"
+                    class="hover:text-claude-accent transition-colors">GitHub</a>
                 <a href="mailto:3224782312@qq.com" class="hover:text-claude-accent transition-colors">Email</a>
             </div>
         </div>
@@ -574,6 +704,47 @@
         document.addEventListener('mouseenter', () => {
             dot.style.opacity = '1';
             ring.style.opacity = '1';
+        });
+
+        // ===== 点击特效 =====
+        document.addEventListener('mousedown', (e) => {
+            // 光标缩小
+            ring.classList.add('clicking');
+
+            // 产生波纹
+            const ripple = document.createElement('div');
+            ripple.className = 'click-ripple';
+            ripple.style.left = e.clientX + 'px';
+            ripple.style.top = e.clientY + 'px';
+            document.body.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+
+            // 产生爆炸散开粒子
+            for (let i = 0; i < 5; i++) {
+                const p = document.createElement('div');
+                p.className = 'click-particle';
+                p.style.left = e.clientX + 'px';
+                p.style.top = e.clientY + 'px';
+                document.body.appendChild(p);
+
+                // 引入一定的随机角度和速度
+                const angle = (Math.PI * 2 * i) / 5 + (Math.random() * 0.5 - 0.25);
+                const velocity = 25 + Math.random() * 15;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+
+                // 使用 Web Animations API
+                p.animate([
+                    { transform: `translate(-50%, -50%) scale(1)`, opacity: 0.8 },
+                    { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0)`, opacity: 0 }
+                ], {
+                    duration: 400 + Math.random() * 200,
+                    easing: 'cubic-bezier(0.19, 1, 0.22, 1)'
+                }).onfinish = () => p.remove();
+            }
+        });
+        document.addEventListener('mouseup', () => {
+            ring.classList.remove('clicking');
         });
 
         // 年份
