@@ -1,568 +1,662 @@
-<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="zh-CN" class="scroll-smooth dark">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Loading... | MieSheeeep Blog</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-        rel="stylesheet">
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github-dark-dimmed.min.css"
-        id="hljs-dark">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github.min.css"
-        id="hljs-light" disabled>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github-dark-dimmed.min.css"
+      id="hljs-dark"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github.min.css"
+      id="hljs-light"
+      disabled
+    />
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
 
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-                        serif: ['"Noto Serif SC"', 'ui-serif', 'Georgia', 'Cambria', 'serif'],
-                        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
-                    },
-                    colors: {
-                        claude: {
-                            bg: 'var(--bg)',
-                            surface: 'var(--surface)',
-                            surfaceHover: 'var(--surface-hover)',
-                            border: 'var(--border)',
-                            text: 'var(--text)',
-                            muted: 'var(--muted)',
-                            accent: '#D97757',
-                            accentHover: '#E38859'
-                        }
-                    }
-                }
-            }
-        }
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+              serif: [
+                '"Noto Serif SC"',
+                "ui-serif",
+                "Georgia",
+                "Cambria",
+                "serif",
+              ],
+              mono: ['"JetBrains Mono"', "ui-monospace", "monospace"],
+            },
+            colors: {
+              claude: {
+                bg: "var(--bg)",
+                surface: "var(--surface)",
+                surfaceHover: "var(--surface-hover)",
+                border: "var(--border)",
+                text: "var(--text)",
+                muted: "var(--muted)",
+                heading: "var(--heading)",
+                accent: "#D97757",
+                accentHover: "#E38859",
+              },
+            },
+          },
+        },
+      };
     </script>
 
     <style>
-        :root {
-            --bg: #141414;
-            --surface: #1F1E1D;
-            --surface-hover: #2A2928;
-            --border: #333130;
-            --text: #D6D2CC;
-            --muted: #8E8A85;
-            --nav-bg: rgba(20, 20, 20, 0.85);
-            --heading: #ffffff;
+      :root {
+        --bg: #141414;
+        --surface: #1f1e1d;
+        --surface-hover: #2a2928;
+        --border: #333130;
+        --text: #d6d2cc;
+        --muted: #8e8a85;
+        --nav-bg: rgba(20, 20, 20, 0.85);
+        --heading: #ffffff;
+      }
+
+      html:not(.dark) {
+        --bg: #ffffff;
+        --surface: #f8f8f8;
+        --surface-hover: #f0f0f0;
+        --border: #e5e5e5;
+        --text: #3d3d3d;
+        --muted: #828282;
+        --nav-bg: rgba(255, 255, 255, 0.85);
+        --heading: #111111;
+      }
+
+      body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: "Inter", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        cursor: none;
+      }
+
+      a,
+      button {
+        cursor: none;
+      }
+
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--bg);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 4px;
+      }
+
+      ::selection {
+        background-color: rgba(217, 119, 87, 0.3);
+        color: #fff;
+      }
+
+      /* 光标 */
+      .cursor-dot {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 6px;
+        height: 6px;
+        background: #d97757;
+        border-radius: 50%;
+        box-shadow: 0 0 8px rgba(217, 119, 87, 0.6);
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition:
+          width 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+          height 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+          background-color 0.3s;
+      }
+
+      .cursor-ring {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 44px;
+        height: 44px;
+        border: 1px solid rgba(217, 119, 87, 0.5);
+        background: rgba(217, 119, 87, 0.05);
+        backdrop-filter: blur(1px);
+        -webkit-backdrop-filter: blur(1px);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9998;
+        transform: translate(-50%, -50%);
+        transition:
+          width 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+          height 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+          border-color 0.3s,
+          background-color 0.3s,
+          transform 0.15s ease-out;
+      }
+
+      .cursor-dot.hover {
+        width: 10px;
+        height: 10px;
+        background: #fff;
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+      }
+
+      .cursor-ring.hover {
+        width: 58px;
+        height: 58px;
+        background: rgba(217, 119, 87, 0.15);
+        border-color: rgba(217, 119, 87, 0.6);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+      }
+
+      .cursor-ring.clicking {
+        transform: translate(-50%, -50%) scale(0.8) !important;
+        background: rgba(217, 119, 87, 0.3);
+        border-color: rgba(217, 119, 87, 0.8);
+      }
+
+      /* 波纹与粒子 */
+      .click-ripple {
+        position: fixed;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid rgba(217, 119, 87, 0.8);
+        pointer-events: none;
+        z-index: 9997;
+        transform: translate(-50%, -50%);
+        animation: rippleAnim 0.6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+      }
+
+      @keyframes rippleAnim {
+        0% {
+          transform: translate(-50%, -50%) scale(1);
+          opacity: 1;
+          border-width: 2px;
         }
 
-        html:not(.dark) {
-            --bg: #FAFAF8;
-            --surface: #FFFFFF;
-            --surface-hover: #F0EFED;
-            --border: #E2E0DC;
-            --text: #3D3B37;
-            --muted: #8E8A85;
-            --nav-bg: rgba(250, 250, 248, 0.85);
-            --heading: #1A1918;
+        100% {
+          transform: translate(-50%, -50%) scale(4);
+          opacity: 0;
+          border-width: 0;
+        }
+      }
+
+      .click-particle {
+        position: fixed;
+        width: 5px;
+        height: 5px;
+        background: rgba(217, 119, 87, 0.8);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9997;
+      }
+
+      @media (pointer: coarse) {
+        .cursor-dot,
+        .cursor-ring {
+          display: none;
         }
 
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            -webkit-font-smoothing: antialiased;
-            cursor: none;
-            transition: background-color 0.4s, color 0.4s;
-        }
-
+        body,
         a,
         button {
-            cursor: none;
+          cursor: auto;
         }
+      }
 
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
+      .nav-blur {
+        background: var(--nav-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+      }
 
-        ::-webkit-scrollbar-track {
-            background: var(--bg);
-        }
+      /* Markdown 样式 - 使用 CSS 变量适配主题 */
+      .prose-claude h1 {
+        font-family: "Noto Serif SC", serif;
+        font-size: 2.25rem;
+        font-weight: 600;
+        color: var(--heading);
+        margin: 2.5rem 0 1rem;
+        line-height: 1.3;
+      }
 
-        ::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 4px;
-        }
+      .prose-claude h2 {
+        font-family: "Noto Serif SC", serif;
+        font-size: 1.65rem;
+        font-weight: 600;
+        color: var(--heading);
+        margin: 2rem 0 0.75rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--border);
+      }
 
-        ::selection {
-            background-color: rgba(217, 119, 87, 0.3);
-            color: #fff;
-        }
+      .prose-claude h3 {
+        font-family: "Noto Serif SC", serif;
+        font-size: 1.3rem;
+        font-weight: 500;
+        color: var(--heading);
+        margin: 1.5rem 0 0.5rem;
+      }
 
-        /* 光标 */
-        .cursor-dot {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 6px;
-            height: 6px;
-            background: #D97757;
-            border-radius: 50%;
-            box-shadow: 0 0 8px rgba(217, 119, 87, 0.6);
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), height 0.3s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s;
-        }
+      .prose-claude h4 {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: var(--text);
+        margin: 1.25rem 0 0.5rem;
+      }
 
-        .cursor-ring {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 44px;
-            height: 44px;
-            border: 1px solid rgba(217, 119, 87, 0.5);
-            background: rgba(217, 119, 87, 0.05);
-            backdrop-filter: blur(1px);
-            -webkit-backdrop-filter: blur(1px);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9998;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), height 0.3s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s, background-color 0.3s, transform 0.15s ease-out;
-        }
+      .prose-claude p {
+        margin: 1rem 0;
+        line-height: 1.8;
+      }
 
-        .cursor-dot.hover {
-            width: 10px;
-            height: 10px;
-            background: #fff;
-            box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
-        }
+      .prose-claude a {
+        color: #d97757;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
 
-        .cursor-ring.hover {
-            width: 58px;
-            height: 58px;
-            background: rgba(217, 119, 87, 0.15);
-            border-color: rgba(217, 119, 87, 0.6);
-            backdrop-filter: blur(2px);
-            -webkit-backdrop-filter: blur(2px);
-        }
+      .prose-claude a:hover {
+        color: #e38859;
+      }
 
-        .cursor-ring.clicking {
-            transform: translate(-50%, -50%) scale(0.8) !important;
-            background: rgba(217, 119, 87, 0.3);
-            border-color: rgba(217, 119, 87, 0.8);
-        }
+      .prose-claude strong {
+        color: var(--heading);
+        font-weight: 600;
+      }
 
-        /* 波纹与粒子 */
-        .click-ripple {
-            position: fixed;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: 2px solid rgba(217, 119, 87, 0.8);
-            pointer-events: none;
-            z-index: 9997;
-            transform: translate(-50%, -50%);
-            animation: rippleAnim 0.6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
-        }
+      .prose-claude em {
+        color: var(--muted);
+      }
 
-        @keyframes rippleAnim {
-            0% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 1;
-                border-width: 2px;
-            }
+      .prose-claude blockquote {
+        border-left: 3px solid #d97757;
+        padding: 0.75rem 1.25rem;
+        margin: 1.5rem 0;
+        background: var(--surface);
+        border-radius: 0 8px 8px 0;
+        color: var(--muted);
+      }
 
-            100% {
-                transform: translate(-50%, -50%) scale(4);
-                opacity: 0;
-                border-width: 0;
-            }
-        }
+      .prose-claude blockquote p {
+        margin: 0.25rem 0;
+      }
 
-        .click-particle {
-            position: fixed;
-            width: 5px;
-            height: 5px;
-            background: rgba(217, 119, 87, 0.8);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9997;
-        }
+      .prose-claude ul,
+      .prose-claude ol {
+        margin: 1rem 0;
+        padding-left: 1.5rem;
+      }
 
-        @media (pointer: coarse) {
+      .prose-claude ul {
+        list-style-type: disc;
+      }
 
-            .cursor-dot,
-            .cursor-ring {
-                display: none;
-            }
+      .prose-claude ol {
+        list-style-type: decimal;
+      }
 
-            body,
-            a,
-            button {
-                cursor: auto;
-            }
-        }
+      .prose-claude li {
+        margin: 0.35rem 0;
+        line-height: 1.7;
+      }
 
-        .nav-blur {
-            background: var(--nav-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
-            transition: background 0.4s;
-        }
+      .prose-claude code {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.875em;
+        background: var(--surface);
+        padding: 0.15em 0.4em;
+        border-radius: 4px;
+        color: #d97757;
+      }
 
-        .text-white {
-            color: var(--heading);
-        }
+      .prose-claude pre {
+        margin: 1.5rem 0;
+        border-radius: 12px;
+        overflow-x: auto;
+        border: 1px solid var(--border);
+      }
 
-        /* Markdown 样式 - 使用 CSS 变量适配主题 */
-        .prose-claude h1 {
-            font-family: 'Noto Serif SC', serif;
-            font-size: 2.25rem;
-            font-weight: 600;
-            color: var(--heading);
-            margin: 2.5rem 0 1rem;
-            line-height: 1.3;
-        }
+      .prose-claude pre code {
+        background: none;
+        padding: 1.25rem;
+        display: block;
+        color: var(--text);
+        font-size: 0.85rem;
+        line-height: 1.6;
+      }
 
-        .prose-claude h2 {
-            font-family: 'Noto Serif SC', serif;
-            font-size: 1.65rem;
-            font-weight: 600;
-            color: var(--heading);
-            margin: 2rem 0 0.75rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--border);
-        }
+      .prose-claude img {
+        max-width: 100%;
+        border-radius: 12px;
+        margin: 1.5rem 0;
+        border: 1px solid var(--border);
+      }
 
-        .prose-claude h3 {
-            font-family: 'Noto Serif SC', serif;
-            font-size: 1.3rem;
-            font-weight: 500;
-            color: var(--heading);
-            margin: 1.5rem 0 0.5rem;
-        }
+      .prose-claude hr {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 2rem 0;
+      }
 
-        .prose-claude h4 {
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: var(--text);
-            margin: 1.25rem 0 0.5rem;
-        }
+      .prose-claude table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5rem 0;
+        font-size: 0.9rem;
+      }
 
-        .prose-claude p {
-            margin: 1rem 0;
-            line-height: 1.8;
-        }
+      .prose-claude th {
+        background: var(--surface);
+        padding: 0.75rem 1rem;
+        text-align: left;
+        border: 1px solid var(--border);
+        color: var(--heading);
+        font-weight: 500;
+      }
 
-        .prose-claude a {
-            color: #D97757;
-            text-decoration: underline;
-            text-underline-offset: 3px;
-        }
+      .prose-claude td {
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--border);
+      }
 
-        .prose-claude a:hover {
-            color: #E38859;
-        }
-
-        .prose-claude strong {
-            color: var(--heading);
-            font-weight: 600;
-        }
-
-        .prose-claude em {
-            color: var(--muted);
-        }
-
-        .prose-claude blockquote {
-            border-left: 3px solid #D97757;
-            padding: 0.75rem 1.25rem;
-            margin: 1.5rem 0;
-            background: var(--surface);
-            border-radius: 0 8px 8px 0;
-            color: var(--muted);
-        }
-
-        .prose-claude blockquote p {
-            margin: 0.25rem 0;
-        }
-
-        .prose-claude ul,
-        .prose-claude ol {
-            margin: 1rem 0;
-            padding-left: 1.5rem;
-        }
-
-        .prose-claude ul {
-            list-style-type: disc;
-        }
-
-        .prose-claude ol {
-            list-style-type: decimal;
-        }
-
-        .prose-claude li {
-            margin: 0.35rem 0;
-            line-height: 1.7;
-        }
-
-        .prose-claude code {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.875em;
-            background: var(--surface);
-            padding: 0.15em 0.4em;
-            border-radius: 4px;
-            color: #D97757;
-        }
-
-        .prose-claude pre {
-            margin: 1.5rem 0;
-            border-radius: 12px;
-            overflow-x: auto;
-            border: 1px solid var(--border);
-        }
-
-        .prose-claude pre code {
-            background: none;
-            padding: 1.25rem;
-            display: block;
-            color: var(--text);
-            font-size: 0.85rem;
-            line-height: 1.6;
-        }
-
-        .prose-claude img {
-            max-width: 100%;
-            border-radius: 12px;
-            margin: 1.5rem 0;
-            border: 1px solid var(--border);
-        }
-
-        .prose-claude hr {
-            border: none;
-            border-top: 1px solid var(--border);
-            margin: 2rem 0;
-        }
-
-        .prose-claude table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1.5rem 0;
-            font-size: 0.9rem;
-        }
-
-        .prose-claude th {
-            background: var(--surface);
-            padding: 0.75rem 1rem;
-            text-align: left;
-            border: 1px solid var(--border);
-            color: var(--heading);
-            font-weight: 500;
-        }
-
-        .prose-claude td {
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border);
-        }
-
-        html.theme-transitioning *,
-        html.theme-transitioning *::before,
-        html.theme-transitioning *::after {
-            transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                fill 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                stroke 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        }
+      html.theme-transitioning *,
+      html.theme-transitioning *::before,
+      html.theme-transitioning *::after {
+        transition:
+          background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+          border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+          color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+          fill 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+          stroke 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="cursor-dot" id="cursor-dot"></div>
     <div class="cursor-ring" id="cursor-ring"></div>
 
     <!-- 导航 -->
-    <header class="fixed top-0 w-full z-50 nav-blur py-4 px-6 md:px-12 flex justify-between items-center">
-        <a href="index.html"
-            class="font-serif text-lg font-medium tracking-wider text-claude-text hover:text-claude-accent transition-colors duration-300">
-            MieSheeeep.
+    <header
+      class="fixed top-0 w-full z-50 nav-blur py-4 px-6 md:px-12 flex justify-between items-center"
+    >
+      <a
+        href="index.html"
+        class="font-serif text-lg font-medium tracking-wider text-claude-text hover:text-claude-accent transition-colors duration-300"
+      >
+        MieSheeeep.
+      </a>
+      <div class="flex items-center gap-6">
+        <a
+          href="index.html#blog"
+          class="flex items-center gap-2 text-sm text-claude-muted hover:text-claude-text transition-colors"
+        >
+          <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to Blog
         </a>
-        <div class="flex items-center gap-6">
-            <a href="index.html#blog"
-                class="flex items-center gap-2 text-sm text-claude-muted hover:text-claude-text transition-colors">
-                <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to Blog
-            </a>
-            <button id="theme-toggle"
-                class="relative w-6 h-6 flex items-center justify-center text-claude-muted hover:text-claude-accent transition-colors"
-                aria-label="Toggle theme">
-                <i data-lucide="sun"
-                    class="absolute w-5 h-5 transition-transform duration-500 scale-0 -rotate-90 dark:scale-100 dark:rotate-0"></i>
-                <i data-lucide="moon"
-                    class="absolute w-5 h-5 transition-transform duration-500 scale-100 rotate-0 dark:scale-0 dark:rotate-90"></i>
-            </button>
-        </div>
+        <button
+          id="theme-toggle"
+          class="relative w-6 h-6 flex items-center justify-center text-claude-muted hover:text-claude-accent transition-colors"
+          aria-label="Toggle theme"
+        >
+          <i
+            data-lucide="sun"
+            class="absolute w-5 h-5 transition-transform duration-500 scale-0 -rotate-90 dark:scale-100 dark:rotate-0"
+          ></i>
+          <i
+            data-lucide="moon"
+            class="absolute w-5 h-5 transition-transform duration-500 scale-100 rotate-0 dark:scale-0 dark:rotate-90"
+          ></i>
+        </button>
+      </div>
     </header>
 
     <main class="max-w-3xl mx-auto px-6 md:px-12 pt-32 pb-24">
-        <div id="post-meta" class="mb-12">
-            <div class="text-claude-muted text-sm font-mono mb-4" id="post-date">Loading...</div>
-            <h1 class="text-4xl md:text-5xl font-serif font-medium text-white leading-tight mb-6" id="post-title"></h1>
-            <div class="flex gap-2" id="post-tags"></div>
+      <div id="post-meta" class="mb-12">
+        <div class="text-claude-muted text-sm font-mono mb-4" id="post-date">
+          Loading...
         </div>
+        <h1
+          class="text-4xl md:text-5xl font-serif font-medium text-claude-heading leading-tight mb-6"
+          id="post-title"
+        ></h1>
+        <div class="flex gap-2" id="post-tags"></div>
+      </div>
 
-        <article class="prose-claude" id="post-content">
-            <div class="py-12 text-center text-claude-muted flex flex-col items-center gap-3">
-                <i data-lucide="loader-2" class="w-6 h-6 animate-spin"></i>
-                正在加载文章...
-            </div>
-        </article>
-
-        <div class="mt-16 pt-8 border-t border-claude-border flex justify-between items-center">
-            <a href="index.html#blog"
-                class="flex items-center gap-2 text-claude-muted hover:text-claude-accent transition-colors text-sm">
-                <i data-lucide="arrow-left" class="w-4 h-4"></i> 所有文章
-            </a>
-            <button onclick="window.scrollTo({top:0,behavior:'smooth'})"
-                class="flex items-center gap-2 text-claude-muted hover:text-claude-accent transition-colors text-sm">
-                回到顶部 <i data-lucide="arrow-up" class="w-4 h-4"></i>
-            </button>
+      <article class="prose-claude" id="post-content">
+        <div
+          class="py-12 text-center text-claude-muted flex flex-col items-center gap-3"
+        >
+          <i data-lucide="loader-2" class="w-6 h-6 animate-spin"></i>
+          正在加载文章...
         </div>
+      </article>
+
+      <div
+        class="mt-16 pt-8 border-t border-claude-border flex justify-between items-center"
+      >
+        <a
+          href="index.html#blog"
+          class="flex items-center gap-2 text-claude-muted hover:text-claude-accent transition-colors text-sm"
+        >
+          <i data-lucide="arrow-left" class="w-4 h-4"></i> 所有文章
+        </a>
+        <button
+          onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+          class="flex items-center gap-2 text-claude-muted hover:text-claude-accent transition-colors text-sm"
+        >
+          回到顶部 <i data-lucide="arrow-up" class="w-4 h-4"></i>
+        </button>
+      </div>
     </main>
 
     <footer class="border-t border-claude-border bg-claude-bg py-8 text-center">
-        <p class="text-claude-muted text-sm">&copy;
-            <script>document.write(new Date().getFullYear())</script> MieSheeeep.
-        </p>
+      <p class="text-claude-muted text-sm">
+        &copy;
+        <script>
+          document.write(new Date().getFullYear());
+        </script>
+        MieSheeeep.
+      </p>
     </footer>
 
     <script>
-        // 主题
-        function getTheme() {
-            return localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      // 主题
+      function getTheme() {
+        return (
+          localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light")
+        );
+      }
+      function applyTheme(theme) {
+        const html = document.documentElement;
+        html.classList.add("theme-transitioning");
+        html.classList.toggle("dark", theme === "dark");
+        localStorage.setItem("theme", theme);
+        // 切换代码高亮样式
+        document.getElementById("hljs-dark").disabled = theme !== "dark";
+        document.getElementById("hljs-light").disabled = theme === "dark";
+        setTimeout(() => html.classList.remove("theme-transitioning"), 500);
+      }
+      function toggleTheme() {
+        applyTheme(
+          document.documentElement.classList.contains("dark")
+            ? "light"
+            : "dark",
+        );
+        lucide.createIcons();
+      }
+      applyTheme(getTheme());
+      document
+        .getElementById("theme-toggle")
+        .addEventListener("click", toggleTheme);
+
+      // 光标
+      const dot = document.getElementById("cursor-dot");
+      const ring = document.getElementById("cursor-ring");
+      let mouseX = -100,
+        mouseY = -100,
+        ringX = -100,
+        ringY = -100;
+      document.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        dot.style.left = mouseX + "px";
+        dot.style.top = mouseY + "px";
+      });
+      (function animateRing() {
+        ringX += (mouseX - ringX) * 0.15;
+        ringY += (mouseY - ringY) * 0.15;
+        ring.style.left = ringX + "px";
+        ring.style.top = ringY + "px";
+        requestAnimationFrame(animateRing);
+      })();
+      document.addEventListener("mouseover", (e) => {
+        if (e.target.closest("a, button")) {
+          dot.classList.add("hover");
+          ring.classList.add("hover");
         }
-        function applyTheme(theme) {
-            const html = document.documentElement;
-            html.classList.add('theme-transitioning');
-            html.classList.toggle('dark', theme === 'dark');
-            localStorage.setItem('theme', theme);
-            // 切换代码高亮样式
-            document.getElementById('hljs-dark').disabled = theme !== 'dark';
-            document.getElementById('hljs-light').disabled = theme === 'dark';
-            setTimeout(() => html.classList.remove('theme-transitioning'), 500);
+      });
+      document.addEventListener("mouseout", (e) => {
+        if (e.target.closest("a, button")) {
+          dot.classList.remove("hover");
+          ring.classList.remove("hover");
         }
-        function toggleTheme() {
-            applyTheme(document.documentElement.classList.contains('dark') ? 'light' : 'dark');
-            lucide.createIcons();
-        }
-        applyTheme(getTheme());
-        document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+      });
+      document.addEventListener("mouseleave", () => {
+        dot.style.opacity = "0";
+        ring.style.opacity = "0";
+      });
+      document.addEventListener("mouseenter", () => {
+        dot.style.opacity = "1";
+        ring.style.opacity = "1";
+      });
 
-        // 光标
-        const dot = document.getElementById('cursor-dot');
-        const ring = document.getElementById('cursor-ring');
-        let mouseX = -100, mouseY = -100, ringX = -100, ringY = -100;
-        document.addEventListener('mousemove', e => {
-            mouseX = e.clientX; mouseY = e.clientY;
-            dot.style.left = mouseX + 'px'; dot.style.top = mouseY + 'px';
-        });
-        (function animateRing() {
-            ringX += (mouseX - ringX) * 0.15;
-            ringY += (mouseY - ringY) * 0.15;
-            ring.style.left = ringX + 'px'; ring.style.top = ringY + 'px';
-            requestAnimationFrame(animateRing);
-        })();
-        document.addEventListener('mouseover', e => {
-            if (e.target.closest('a, button')) { dot.classList.add('hover'); ring.classList.add('hover'); }
-        });
-        document.addEventListener('mouseout', e => {
-            if (e.target.closest('a, button')) { dot.classList.remove('hover'); ring.classList.remove('hover'); }
-        });
-        document.addEventListener('mouseleave', () => { dot.style.opacity = '0'; ring.style.opacity = '0'; });
-        document.addEventListener('mouseenter', () => { dot.style.opacity = '1'; ring.style.opacity = '1'; });
+      // 点击特效
+      document.addEventListener("mousedown", (e) => {
+        ring.classList.add("clicking");
+        const ripple = document.createElement("div");
+        ripple.className = "click-ripple";
+        ripple.style.left = e.clientX + "px";
+        ripple.style.top = e.clientY + "px";
+        document.body.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
 
-        // 点击特效
-        document.addEventListener('mousedown', (e) => {
-            ring.classList.add('clicking');
-            const ripple = document.createElement('div');
-            ripple.className = 'click-ripple';
-            ripple.style.left = e.clientX + 'px';
-            ripple.style.top = e.clientY + 'px';
-            document.body.appendChild(ripple);
-            setTimeout(() => ripple.remove(), 600);
-
-            for (let i = 0; i < 5; i++) {
-                const p = document.createElement('div');
-                p.className = 'click-particle';
-                p.style.left = e.clientX + 'px';
-                p.style.top = e.clientY + 'px';
-                document.body.appendChild(p);
-                const angle = (Math.PI * 2 * i) / 5 + (Math.random() * 0.5 - 0.25);
-                const velocity = 25 + Math.random() * 15;
-                const tx = Math.cos(angle) * velocity;
-                const ty = Math.sin(angle) * velocity;
-                p.animate([
-                    { transform: `translate(-50%, -50%) scale(1)`, opacity: 0.8 },
-                    { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0)`, opacity: 0 }
-                ], { duration: 400 + Math.random() * 200, easing: 'cubic-bezier(0.19, 1, 0.22, 1)' }).onfinish = () => p.remove();
-            }
-        });
-        document.addEventListener('mouseup', () => { ring.classList.remove('clicking'); });
-
-        // Marked 配置
-        marked.setOptions({
-            highlight: function (code, lang) {
-                if (lang && hljs.getLanguage(lang)) return hljs.highlight(code, { language: lang }).value;
-                return hljs.highlightAuto(code).value;
+        for (let i = 0; i < 5; i++) {
+          const p = document.createElement("div");
+          p.className = "click-particle";
+          p.style.left = e.clientX + "px";
+          p.style.top = e.clientY + "px";
+          document.body.appendChild(p);
+          const angle = (Math.PI * 2 * i) / 5 + (Math.random() * 0.5 - 0.25);
+          const velocity = 25 + Math.random() * 15;
+          const tx = Math.cos(angle) * velocity;
+          const ty = Math.sin(angle) * velocity;
+          p.animate(
+            [
+              { transform: `translate(-50%, -50%) scale(1)`, opacity: 0.8 },
+              {
+                transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0)`,
+                opacity: 0,
+              },
+            ],
+            {
+              duration: 400 + Math.random() * 200,
+              easing: "cubic-bezier(0.19, 1, 0.22, 1)",
             },
-            breaks: true, gfm: true
-        });
+          ).onfinish = () => p.remove();
+        }
+      });
+      document.addEventListener("mouseup", () => {
+        ring.classList.remove("clicking");
+      });
 
-        async function loadPost() {
-            const slug = new URLSearchParams(window.location.search).get('slug');
-            if (!slug) {
-                document.getElementById('post-content').innerHTML = '<p class="text-claude-muted">未找到文章</p>';
-                return;
-            }
-            try {
-                const metaRes = await fetch('posts/posts.json');
-                const posts = await metaRes.json();
-                const postMeta = posts.find(p => p.slug === slug);
-                if (postMeta) {
-                    document.getElementById('post-title').textContent = postMeta.title;
-                    document.getElementById('post-date').textContent = postMeta.date;
-                    document.title = `${postMeta.title} | MieSheeeep Blog`;
-                    if (postMeta.tags) {
-                        document.getElementById('post-tags').innerHTML = postMeta.tags
-                            .map(t => `<span class="text-xs text-claude-muted bg-claude-surface px-2 py-1 rounded">${t}</span>`)
-                            .join('');
-                    }
-                }
-                const mdRes = await fetch(`posts/${slug}.md`);
-                if (!mdRes.ok) throw new Error('文章不存在');
-                document.getElementById('post-content').innerHTML = marked.parse(await mdRes.text());
-                hljs.highlightAll();
-                lucide.createIcons();
-            } catch (err) {
-                document.getElementById('post-content').innerHTML = `
-                    <div class="py-12 text-center text-claude-muted">
-                        <p>文章加载失败: ${err.message}</p>
-                        <a href="index.html#blog" class="text-claude-accent mt-4 inline-block">返回博客列表</a>
-                    </div>`;
-            }
+      // Marked 配置
+      marked.setOptions({
+        highlight: function (code, lang) {
+          if (lang && hljs.getLanguage(lang)) {
+            return hljs.highlight(code, { language: lang }).value;
+          }
+          return hljs.highlightAuto(code).value;
+        },
+        breaks: true,
+        gfm: true,
+      });
+
+      lucide.createIcons();
+
+      // 加载文章
+      async function loadPost() {
+        const params = new URLSearchParams(window.location.search);
+        const slug = params.get("slug");
+
+        if (!slug) {
+          document.getElementById("post-content").innerHTML =
+            '<div class="py-12 text-center text-claude-muted">未找到文章</div>';
+          return;
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-            loadPost();
-        });
-    </script>
-</body>
+        try {
+          const metaRes = await fetch("posts/posts.json");
+          if (!metaRes.ok) throw new Error("Cannot load metadata");
+          const posts = await metaRes.json();
+          const post = posts.find((p) => p.slug === slug);
 
+          if (post) {
+            document.title = `${post.title} | MieSheeeep Blog`;
+            document.getElementById("post-title").textContent = post.title;
+            document.getElementById("post-date").textContent = post.date;
+            if (post.tags) {
+              document.getElementById("post-tags").innerHTML = post.tags
+                .map(
+                  (t) =>
+                    `<span class="text-xs text-claude-muted bg-claude-surface px-2 py-0.5 rounded border border-claude-border">${t}</span>`,
+                )
+                .join("");
+            }
+          }
+
+          const res = await fetch(`posts/${slug}.md`);
+          if (!res.ok) throw new Error("Cannot load article");
+          const text = await res.text();
+
+          document.getElementById("post-content").innerHTML =
+            marked.parse(text);
+        } catch (e) {
+          document.getElementById("post-content").innerHTML =
+            `<div class="py-12 text-center text-claude-muted">文章加载失败: ${e.message}</div>`;
+        }
+      }
+
+      loadPost();
+    </script>
+  </body>
 </html>

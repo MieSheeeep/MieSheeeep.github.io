@@ -1,802 +1,958 @@
-<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="zh-CN" class="scroll-smooth dark">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MieSheeeep | Machine Learning</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-                        serif: ['"Noto Serif SC"', 'ui-serif', 'Georgia', 'Cambria', 'serif'],
-                    },
-                    colors: {
-                        claude: {
-                            bg: 'var(--bg)',
-                            surface: 'var(--surface)',
-                            surfaceHover: 'var(--surface-hover)',
-                            border: 'var(--border)',
-                            text: 'var(--text)',
-                            muted: 'var(--muted)',
-                            accent: '#D97757',
-                            accentHover: '#E38859'
-                        }
-                    }
-                }
-            }
-        }
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+              serif: [
+                '"Noto Serif SC"',
+                "ui-serif",
+                "Georgia",
+                "Cambria",
+                "serif",
+              ],
+            },
+            colors: {
+              claude: {
+                bg: "var(--bg)",
+                surface: "var(--surface)",
+                surfaceHover: "var(--surface-hover)",
+                border: "var(--border)",
+                text: "var(--text)",
+                muted: "var(--muted)",
+                heading: "var(--heading)",
+                accent: "#D97757",
+                accentHover: "#E38859",
+              },
+            },
+          },
+        },
+      };
     </script>
 
     <style>
-        /* ===== 主题变量 ===== */
-        :root {
-            --bg: #141414;
-            --surface: #1F1E1D;
-            --surface-hover: #2A2928;
-            --border: #333130;
-            --text: #D6D2CC;
-            --muted: #8E8A85;
-            --nav-bg: rgba(20, 20, 20, 0.85);
-            --scrollbar-track: #141414;
-            --scrollbar-thumb: #333130;
-            --heading: #ffffff;
+      /* ===== 主题变量 ===== */
+      :root {
+        --bg: #141414;
+        --surface: #1f1e1d;
+        --surface-hover: #2a2928;
+        --border: #333130;
+        --text: #d6d2cc;
+        --muted: #8e8a85;
+        --nav-bg: rgba(20, 20, 20, 0.85);
+        --scrollbar-track: #141414;
+        --scrollbar-thumb: #333130;
+        --heading: #ffffff;
+      }
+
+      html:not(.dark) {
+        --bg: #ffffff;
+        --surface: #f8f8f8;
+        --surface-hover: #f0f0f0;
+        --border: #e5e5e5;
+        --text: #3d3d3d;
+        --muted: #828282;
+        --nav-bg: rgba(255, 255, 255, 0.85);
+        --scrollbar-track: #ffffff;
+        --scrollbar-thumb: #d1d1d1;
+        --heading: #111111;
+      }
+
+      body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: "Inter", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        cursor: none;
+      }
+
+      /* 链接和可交互元素也隐藏系统光标 */
+      a,
+      button,
+      input,
+      textarea,
+      select,
+      [role="button"] {
+        cursor: none;
+      }
+
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--scrollbar-track);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-thumb);
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--muted);
+      }
+
+      ::selection {
+        background-color: rgba(217, 119, 87, 0.3);
+        color: #fff;
+      }
+
+      /* ===== 自定义光标与特效 ===== */
+      .cursor-dot {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 6px;
+        height: 6px;
+        background: #d97757;
+        box-shadow: 0 0 8px rgba(217, 119, 87, 0.6);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition:
+          width 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+          height 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+          background-color 0.3s;
+      }
+
+      .cursor-ring {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 44px;
+        height: 44px;
+        border: 1px solid rgba(217, 119, 87, 0.5);
+        background: rgba(217, 119, 87, 0.05);
+        backdrop-filter: blur(1px);
+        -webkit-backdrop-filter: blur(1px);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9998;
+        transform: translate(-50%, -50%);
+        transition:
+          width 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+          height 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+          border-color 0.3s,
+          background-color 0.3s,
+          transform 0.15s ease-out;
+      }
+
+      .cursor-dot.hover {
+        width: 10px;
+        height: 10px;
+        background: #fff;
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+      }
+
+      .cursor-ring.hover {
+        width: 58px;
+        height: 58px;
+        border-color: rgba(217, 119, 87, 0.6);
+        background: rgba(217, 119, 87, 0.15);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+      }
+
+      .cursor-ring.clicking {
+        transform: translate(-50%, -50%) scale(0.8) !important;
+        background: rgba(217, 119, 87, 0.3);
+        border-color: rgba(217, 119, 87, 0.8);
+      }
+
+      /* ===== 点击波纹与粒子 ===== */
+      .click-ripple {
+        position: fixed;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid rgba(217, 119, 87, 0.8);
+        pointer-events: none;
+        z-index: 9997;
+        transform: translate(-50%, -50%);
+        animation: rippleAnim 0.6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+      }
+
+      @keyframes rippleAnim {
+        0% {
+          transform: translate(-50%, -50%) scale(1);
+          opacity: 1;
+          border-width: 2px;
         }
 
-        html:not(.dark) {
-            --bg: #FAFAF8;
-            --surface: #FFFFFF;
-            --surface-hover: #F0EFED;
-            --border: #E2E0DC;
-            --text: #3D3B37;
-            --muted: #8E8A85;
-            --nav-bg: rgba(250, 250, 248, 0.85);
-            --scrollbar-track: #FAFAF8;
-            --scrollbar-thumb: #D6D2CC;
-            --heading: #1A1918;
+        100% {
+          transform: translate(-50%, -50%) scale(4);
+          opacity: 0;
+          border-width: 0;
+        }
+      }
+
+      .click-particle {
+        position: fixed;
+        width: 5px;
+        height: 5px;
+        background: rgba(217, 119, 87, 0.8);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9997;
+      }
+
+      /* 移动端隐藏自定义光标 */
+      @media (pointer: coarse) {
+        .cursor-dot,
+        .cursor-ring {
+          display: none;
         }
 
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            cursor: none;
-            transition: background-color 0.4s ease, color 0.4s ease;
-        }
-
-        /* 链接和可交互元素也隐藏系统光标 */
+        body,
         a,
         button,
         input,
         textarea,
         select,
         [role="button"] {
-            cursor: none;
+          cursor: auto;
+        }
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+          transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .nav-blur {
+        background: var(--nav-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid transparent;
+        transition:
+          border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+          background 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .nav-blur.scrolled {
+        border-bottom: 1px solid var(--border);
+      }
+
+      .mobile-menu {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+
+      .mobile-menu.open {
+        max-height: 300px;
+      }
+
+      /* 奖项徽章 */
+      .award-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: 9999px;
+        font-size: 0.8rem;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text);
+        transition: all 0.3s;
+      }
+
+      .award-tag:hover {
+        border-color: rgba(217, 119, 87, 0.5);
+        background: var(--surface-hover);
+      }
+
+      .award-level-1 {
+        color: #f59e0b;
+      }
+
+      .award-level-2 {
+        color: #d97757;
+      }
+
+      .award-level-3 {
+        color: #8e8a85;
+      }
+
+      @keyframes scrolldown {
+        0% {
+          transform: translateY(-100%);
         }
 
-        ::-webkit-scrollbar {
-            width: 8px;
+        100% {
+          transform: translateY(200%);
         }
+      }
 
-        ::-webkit-scrollbar-track {
-            background: var(--scrollbar-track);
-        }
+      /* 时间线 */
+      .timeline-item {
+        position: relative;
+        padding-left: 28px;
+      }
 
-        ::-webkit-scrollbar-thumb {
-            background: var(--scrollbar-thumb);
-            border-radius: 4px;
-        }
+      .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 8px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #d97757;
+      }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--muted);
-        }
+      .timeline-item::after {
+        content: "";
+        position: absolute;
+        left: 3.5px;
+        top: 20px;
+        width: 1px;
+        height: calc(100% - 8px);
+        background: var(--border);
+      }
 
-        ::selection {
-            background-color: rgba(217, 119, 87, 0.3);
-            color: #fff;
-        }
+      .timeline-item:last-child::after {
+        display: none;
+      }
 
-        /* ===== 自定义光标与特效 ===== */
-        .cursor-dot {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 6px;
-            height: 6px;
-            background: #D97757;
-            box-shadow: 0 0 8px rgba(217, 119, 87, 0.6);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), height 0.3s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s;
-        }
+      /* 全局过渡 */
+      *,
+      *::before,
+      *::after {
+        transition-property:
+          background-color, border-color, color, fill, stroke;
+        transition-duration: 0s;
+      }
 
-        .cursor-ring {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 44px;
-            height: 44px;
-            border: 1px solid rgba(217, 119, 87, 0.5);
-            background: rgba(217, 119, 87, 0.05);
-            backdrop-filter: blur(1px);
-            -webkit-backdrop-filter: blur(1px);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9998;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), height 0.3s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s, background-color 0.3s, transform 0.15s ease-out;
-        }
-
-        .cursor-dot.hover {
-            width: 10px;
-            height: 10px;
-            background: #fff;
-            box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
-        }
-
-        .cursor-ring.hover {
-            width: 58px;
-            height: 58px;
-            border-color: rgba(217, 119, 87, 0.6);
-            background: rgba(217, 119, 87, 0.15);
-            backdrop-filter: blur(2px);
-            -webkit-backdrop-filter: blur(2px);
-        }
-
-        .cursor-ring.clicking {
-            transform: translate(-50%, -50%) scale(0.8) !important;
-            background: rgba(217, 119, 87, 0.3);
-            border-color: rgba(217, 119, 87, 0.8);
-        }
-
-        /* ===== 点击波纹与粒子 ===== */
-        .click-ripple {
-            position: fixed;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: 2px solid rgba(217, 119, 87, 0.8);
-            pointer-events: none;
-            z-index: 9997;
-            transform: translate(-50%, -50%);
-            animation: rippleAnim 0.6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
-        }
-
-        @keyframes rippleAnim {
-            0% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 1;
-                border-width: 2px;
-            }
-
-            100% {
-                transform: translate(-50%, -50%) scale(4);
-                opacity: 0;
-                border-width: 0;
-            }
-        }
-
-        .click-particle {
-            position: fixed;
-            width: 5px;
-            height: 5px;
-            background: rgba(217, 119, 87, 0.8);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9997;
-        }
-
-        /* 移动端隐藏自定义光标 */
-        @media (pointer: coarse) {
-
-            .cursor-dot,
-            .cursor-ring {
-                display: none;
-            }
-
-            body,
-            a,
-            button,
-            input,
-            textarea,
-            select,
-            [role="button"] {
-                cursor: auto;
-            }
-        }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .nav-blur {
-            background: var(--nav-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid transparent;
-            transition: border-color 0.3s ease, background 0.4s ease;
-        }
-
-        .nav-blur.scrolled {
-            border-bottom: 1px solid var(--border);
-        }
-
-        .mobile-menu {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .mobile-menu.open {
-            max-height: 300px;
-        }
-
-        /* 奖项徽章 */
-        .award-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            border-radius: 9999px;
-            font-size: 0.8rem;
-            border: 1px solid var(--border);
-            background: var(--surface);
-            color: var(--text);
-            transition: all 0.3s;
-        }
-
-        .award-tag:hover {
-            border-color: rgba(217, 119, 87, 0.5);
-            background: var(--surface-hover);
-        }
-
-        .award-level-1 {
-            color: #F59E0B;
-        }
-
-        .award-level-2 {
-            color: #D97757;
-        }
-
-        .award-level-3 {
-            color: #8E8A85;
-        }
-
-        @keyframes scrolldown {
-            0% {
-                transform: translateY(-100%);
-            }
-
-            100% {
-                transform: translateY(200%);
-            }
-        }
-
-        /* 时间线 */
-        .timeline-item {
-            position: relative;
-            padding-left: 28px;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 8px;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #D97757;
-        }
-
-        .timeline-item::after {
-            content: '';
-            position: absolute;
-            left: 3.5px;
-            top: 20px;
-            width: 1px;
-            height: calc(100% - 8px);
-            background: var(--border);
-        }
-
-        .timeline-item:last-child::after {
-            display: none;
-        }
-
-        /* 主题切换按钮动画 */
-        .theme-toggle {
-            position: relative;
-            width: 20px;
-            height: 20px;
-        }
-
-        .theme-toggle svg {
-            position: absolute;
-            inset: 0;
-            transition: opacity 0.3s, transform 0.3s;
-        }
-
-        /* 白色标题文字在亮色模式下适配 */
-        .text-white {
-            color: var(--heading);
-        }
-
-        /* 全局过渡 */
-        *,
-        *::before,
-        *::after {
-            transition-property: background-color, border-color, color, fill, stroke;
-            transition-duration: 0s;
-        }
-
-        html.theme-transitioning *,
-        html.theme-transitioning *::before,
-        html.theme-transitioning *::after {
-            transition-duration: 0.5s;
-            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        }
+      html.theme-transitioning *,
+      html.theme-transitioning *::before,
+      html.theme-transitioning *::after {
+        transition-duration: 0.5s;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      }
     </style>
-</head>
+  </head>
 
-<body class="selection:bg-claude-accent/30 tracking-wide font-light">
-
+  <body class="selection:bg-claude-accent/30 tracking-wide font-light">
     <!-- 自定义光标 -->
     <div class="cursor-dot" id="cursor-dot"></div>
     <div class="cursor-ring" id="cursor-ring"></div>
 
     <!-- 顶部导航 -->
     <header id="navbar" class="fixed top-0 w-full z-50 nav-blur">
-        <div class="py-4 px-6 md:px-12 flex justify-between items-center">
-            <a href="#"
-                class="font-serif text-lg font-medium tracking-wider text-claude-text hover:text-claude-accent transition-colors duration-300">
-                MieSheeeep.
-            </a>
-            <div class="hidden md:flex items-center gap-8">
-                <nav class="flex gap-8 text-sm text-claude-muted">
-                    <a href="#about" class="hover:text-claude-text transition-colors duration-300">About</a>
-                    <a href="#awards" class="hover:text-claude-text transition-colors duration-300">Awards</a>
-                    <a href="#projects" class="hover:text-claude-text transition-colors duration-300">Projects</a>
-                    <a href="#blog" class="hover:text-claude-text transition-colors duration-300">Blog</a>
-                </nav>relative w-6 h-6 flex items-center justify-center text-claude-muted hover:text-claude-accent
-                transition-colors" aria-label="Toggle theme">
-                <i data-lucide="sun"
-                    class="absolute w-5 h-5 transition-transform duration-500 scale-0 -rotate-90 dark:scale-100 dark:rotate-0"></i>
-                <i data-lucide="moon" class="absolute w-5 h-5 transition-transform duration-500 scale-100 rotate-0 dark:scale-0 dark:rotate-90></i>
-                    <i data-lucide=" moon" class="w-5 h-5 block dark:hidden"></i>
-                </button>
-            </div>
-            <div class="flex md:hidden items-center gap-4">
-                <button id="theme-toggle-mobile"
-                    class="relative w-6 h-6 flex items-center justify-center text-claude-muted hover:text-claude-accent transition-colors"
-                    aria-label="Toggle theme">
-                    <i data-lucide="sun"
-                        class="absolute w-5 h-5 transition-transform duration-500 scale-0 -rotate-90 dark:scale-100 dark:rotate-0"></i>
-                    <i data-lucide="moon"
-                        class="absolute w-5 h-5 transition-transform duration-500 scale-100 rotate-0 dark:scale-0 dark:rotate-90"></i>
-                </button>
-                <button id="menu-btn" class="text-claude-muted hover:text-claude-text">
-                    <i data-lucide="menu" class="w-5 h-5"></i>
-                </button>
-            </div>
+      <div class="py-4 px-6 md:px-12 flex justify-between items-center">
+        <a
+          href="#"
+          class="font-serif text-lg font-medium tracking-wider text-claude-text hover:text-claude-accent transition-colors duration-300"
+        >
+          MieSheeeep.
+        </a>
+        <div class="hidden md:flex items-center gap-8">
+          <nav class="flex gap-8 text-sm text-claude-muted">
+            <a
+              href="#about"
+              class="hover:text-claude-text transition-colors duration-300"
+              >About</a
+            >
+            <a
+              href="#awards"
+              class="hover:text-claude-text transition-colors duration-300"
+              >Awards</a
+            >
+            <a
+              href="#projects"
+              class="hover:text-claude-text transition-colors duration-300"
+              >Projects</a
+            >
+            <a
+              href="#blog"
+              class="hover:text-claude-text transition-colors duration-300"
+              >Blog</a
+            >
+          </nav>
+          <button
+            id="theme-toggle"
+            class="relative w-6 h-6 flex items-center justify-center text-claude-muted hover:text-claude-accent transition-colors"
+            aria-label="Toggle theme"
+          >
+            <i
+              data-lucide="sun"
+              class="absolute w-5 h-5 transition-transform duration-500 scale-0 -rotate-90 dark:scale-100 dark:rotate-0"
+            ></i>
+            <i
+              data-lucide="moon"
+              class="absolute w-5 h-5 transition-transform duration-500 scale-100 rotate-0 dark:scale-0 dark:rotate-90"
+            ></i>
+          </button>
         </div>
-        <!-- 移动端菜单 -->
-        <div id="mobile-menu" class="mobile-menu md:hidden px-6 pb-4">
-            <nav class="flex flex-col gap-4 text-sm text-claude-muted">
-                <a href="#about" class="hover:text-claude-text transition-colors">About</a>
-                <a href="#awards" class="hover:text-claude-text transition-colors">Awards</a>
-                <a href="#projects" class="hover:text-claude-text transition-colors">Projects</a>
-                <a href="#blog" class="hover:text-claude-text transition-colors">Blog</a>
-            </nav>
+        <div class="flex md:hidden items-center gap-4">
+          <button
+            id="theme-toggle-mobile"
+            class="relative w-6 h-6 flex items-center justify-center text-claude-muted hover:text-claude-accent transition-colors"
+            aria-label="Toggle theme"
+          >
+            <i
+              data-lucide="sun"
+              class="absolute w-5 h-5 transition-transform duration-500 scale-0 -rotate-90 dark:scale-100 dark:rotate-0"
+            ></i>
+            <i
+              data-lucide="moon"
+              class="absolute w-5 h-5 transition-transform duration-500 scale-100 rotate-0 dark:scale-0 dark:rotate-90"
+            ></i>
+          </button>
+          <button
+            id="menu-btn"
+            class="text-claude-muted hover:text-claude-text"
+          >
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
         </div>
+      </div>
+      <!-- 移动端菜单 -->
+      <div id="mobile-menu" class="mobile-menu md:hidden px-6 pb-4">
+        <nav class="flex flex-col gap-4 text-sm text-claude-muted">
+          <a href="#about" class="hover:text-claude-text transition-colors"
+            >About</a
+          >
+          <a href="#awards" class="hover:text-claude-text transition-colors"
+            >Awards</a
+          >
+          <a href="#projects" class="hover:text-claude-text transition-colors"
+            >Projects</a
+          >
+          <a href="#blog" class="hover:text-claude-text transition-colors"
+            >Blog</a
+          >
+        </nav>
+      </div>
     </header>
 
     <!-- 主容器 -->
     <main class="max-w-4xl mx-auto px-6 md:px-12">
+      <!-- Hero -->
+      <section
+        id="hero"
+        class="min-h-screen flex flex-col justify-center relative reveal active"
+      >
+        <div class="space-y-6 md:space-y-8">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-[1px] bg-claude-accent"></div>
+            <span
+              class="text-claude-accent font-medium text-sm tracking-widest uppercase"
+              >Machine Learning</span
+            >
+          </div>
 
-        <!-- Hero -->
-        <section id="hero" class="min-h-screen flex flex-col justify-center relative reveal active">
-            <div class="space-y-6 md:space-y-8">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-[1px] bg-claude-accent"></div>
-                    <span class="text-claude-accent font-medium text-sm tracking-widest uppercase">Machine
-                        Learning</span>
+          <h1
+            class="text-5xl md:text-7xl lg:text-8xl font-serif font-medium leading-tight tracking-tight text-claude-heading"
+          >
+            Exploring <br />
+            <span class="text-claude-muted font-normal italic"
+              >intelligent</span
+            >
+            frontiers.
+          </h1>
+
+          <p
+            class="text-claude-muted text-lg md:text-xl max-w-2xl leading-relaxed mt-6"
+          >
+            你好，我是 王智洋。<br class="hidden md:block" />
+            福州大学计算机学院在读，专注于机器学习与深度学习研究。<br />
+            热衷于探索 AI 的边界，从理论到实践，从复现到创新。
+          </p>
+
+          <div class="pt-8 flex gap-6 items-center">
+            <a
+              href="#projects"
+              class="group flex items-center gap-2 text-sm font-medium text-claude-text hover:text-claude-accent transition-colors duration-300 pb-1 border-b border-transparent hover:border-claude-accent"
+            >
+              查看项目
+              <i
+                data-lucide="arrow-down-right"
+                class="w-4 h-4 group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform"
+              ></i>
+            </a>
+            <a
+              href="#blog"
+              class="group flex items-center gap-2 text-sm font-medium text-claude-text hover:text-claude-accent transition-colors duration-300 pb-1 border-b border-transparent hover:border-claude-accent"
+            >
+              阅读博客
+              <i
+                data-lucide="arrow-down-right"
+                class="w-4 h-4 group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform"
+              ></i>
+            </a>
+            <div class="flex items-center gap-4 text-claude-muted">
+              <a
+                href="https://github.com/MieSheeeep"
+                target="_blank"
+                class="hover:text-claude-text transition-colors"
+                ><i data-lucide="github" class="w-5 h-5"></i
+              ></a>
+              <a
+                href="mailto:3224782312@qq.com"
+                class="hover:text-claude-text transition-colors"
+                ><i data-lucide="mail" class="w-5 h-5"></i
+              ></a>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="absolute bottom-12 left-0 flex items-center gap-3 text-claude-muted text-xs tracking-widest uppercase opacity-60"
+        >
+          <div class="w-[1px] h-12 bg-claude-border overflow-hidden relative">
+            <div
+              class="absolute top-0 left-0 w-full h-1/2 bg-claude-accent animate-[scrolldown_2s_ease-in-out_infinite]"
+            ></div>
+          </div>
+          Scroll to explore
+        </div>
+      </section>
+
+      <!-- About -->
+      <section id="about" class="py-24 md:py-32 reveal">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+          <div class="md:col-span-1">
+            <h2
+              class="text-sm font-medium text-claude-muted tracking-widest uppercase"
+            >
+              / About Me
+            </h2>
+          </div>
+          <div
+            class="md:col-span-3 space-y-8 text-claude-text leading-relaxed text-base md:text-lg"
+          >
+            <p>
+              我是一名福州大学大二学生，对机器学习与人工智能充满热情。从 CS231n
+              的系统学习，到 GPT-2 的从零复现，我始终相信 ——
+              理解原理、动手实践，才是掌握 AI 最扎实的路径。
+            </p>
+            <p>
+              目前我是<span class="text-claude-accent font-medium"
+                >福州大学西二在线工作室 AI 方向正式成员</span
+              >，同时也是<span class="text-claude-accent font-medium"
+                >福州大学 ACM 服务外包实验室成员</span
+              >。在团队中参与多个 AI 相关项目的研发与竞赛实践。
+            </p>
+
+            <!-- 经历时间线 -->
+            <div class="pt-6 border-t border-claude-border mt-8">
+              <h3 class="text-claude-heading font-serif text-lg mb-6">经历</h3>
+              <div class="space-y-6">
+                <div class="timeline-item">
+                  <div class="text-claude-heading font-medium">
+                    福州大学西二在线工作室
+                  </div>
+                  <div class="text-claude-muted text-sm">AI 方向正式成员</div>
                 </div>
-
-                <h1
-                    class="text-5xl md:text-7xl lg:text-8xl font-serif font-medium leading-tight tracking-tight text-white">
-                    Exploring <br />
-                    <span class="text-claude-muted font-normal italic">intelligent</span> frontiers.
-                </h1>
-
-                <p class="text-claude-muted text-lg md:text-xl max-w-2xl leading-relaxed mt-6">
-                    你好，我是 王智洋。<br class="hidden md:block" />
-                    福州大学计算机学院在读，专注于机器学习与深度学习研究。<br />
-                    热衷于探索 AI 的边界，从理论到实践，从复现到创新。
-                </p>
-
-                <div class="pt-8 flex gap-6 items-center">
-                    <a href="#projects"
-                        class="group flex items-center gap-2 text-sm font-medium text-claude-text hover:text-claude-accent transition-colors duration-300 pb-1 border-b border-transparent hover:border-claude-accent">
-                        查看项目 <i data-lucide="arrow-down-right"
-                            class="w-4 h-4 group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform"></i>
-                    </a>
-                    <a href="#blog"
-                        class="group flex items-center gap-2 text-sm font-medium text-claude-text hover:text-claude-accent transition-colors duration-300 pb-1 border-b border-transparent hover:border-claude-accent">
-                        阅读博客 <i data-lucide="arrow-down-right"
-                            class="w-4 h-4 group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform"></i>
-                    </a>
-                    <div class="flex items-center gap-4 text-claude-muted">
-                        <a href="https://github.com/MieSheeeep" target="_blank"
-                            class="hover:text-claude-text transition-colors"><i data-lucide="github"
-                                class="w-5 h-5"></i></a>
-                        <a href="mailto:3224782312@qq.com" class="hover:text-claude-text transition-colors"><i
-                                data-lucide="mail" class="w-5 h-5"></i></a>
-                    </div>
+                <div class="timeline-item">
+                  <div class="text-claude-heading font-medium">
+                    福州大学 ACM 服务外包实验室
+                  </div>
+                  <div class="text-claude-muted text-sm">实验室成员</div>
                 </div>
+                <div class="timeline-item">
+                  <div class="text-claude-heading font-medium">
+                    Stanford CS231n 课程学习
+                  </div>
+                  <div class="text-claude-muted text-sm">
+                    系统学习计算机视觉，完成课程笔记仓库
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="text-claude-heading font-medium">
+                    GPT-2 模型复现
+                  </div>
+                  <div class="text-claude-muted text-sm">
+                    从零实现 Transformer 架构与训练流程
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div
-                class="absolute bottom-12 left-0 flex items-center gap-3 text-claude-muted text-xs tracking-widest uppercase opacity-60">
-                <div class="w-[1px] h-12 bg-claude-border overflow-hidden relative">
-                    <div
-                        class="absolute top-0 left-0 w-full h-1/2 bg-claude-accent animate-[scrolldown_2s_ease-in-out_infinite]">
-                    </div>
-                </div>
-                Scroll to explore
+              class="pt-6 border-t border-claude-border mt-8 flex flex-col md:flex-row gap-8"
+            >
+              <div>
+                <h3 class="text-claude-heading font-serif text-lg mb-3">
+                  技术栈
+                </h3>
+                <ul class="text-claude-muted space-y-2 text-sm">
+                  <li>Python</li>
+                  <li>PyTorch</li>
+                  <li>NumPy / Pandas / Matplotlib</li>
+                  <li>Vibe-Coding</li>
+                </ul>
+              </div>
+              <div>
+                <h3 class="text-claude-heading font-serif text-lg mb-3">
+                  研究方向
+                </h3>
+                <ul class="text-claude-muted space-y-2 text-sm">
+                  <li>计算机视觉 (CV)</li>
+                  <li>自然语言处理 (NLP)</li>
+                  <li>大语言模型 (LLM)</li>
+                  <li>数学建模</li>
+                </ul>
+              </div>
             </div>
-        </section>
+          </div>
+        </div>
+      </section>
 
-        <!-- About -->
-        <section id="about" class="py-24 md:py-32 reveal">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
-                <div class="md:col-span-1">
-                    <h2 class="text-sm font-medium text-claude-muted tracking-widest uppercase">/ About Me</h2>
-                </div>
-                <div class="md:col-span-3 space-y-8 text-claude-text leading-relaxed text-base md:text-lg">
-                    <p>
-                        我是一名福州大学大二学生，对机器学习与人工智能充满热情。从 CS231n 的系统学习，到 GPT-2 的从零复现，我始终相信 —— 理解原理、动手实践，才是掌握 AI 最扎实的路径。
-                    </p>
-                    <p>
-                        目前我是<span class="text-claude-accent font-medium">福州大学西二在线工作室 AI 方向正式成员</span>，同时也是<span
-                            class="text-claude-accent font-medium">福州大学 ACM 服务外包实验室成员</span>。在团队中参与多个 AI 相关项目的研发与竞赛实践。
-                    </p>
-
-                    <!-- 经历时间线 -->
-                    <div class="pt-6 border-t border-claude-border mt-8">
-                        <h3 class="text-white font-serif text-lg mb-6">经历</h3>
-                        <div class="space-y-6">
-                            <div class="timeline-item">
-                                <div class="text-white font-medium">福州大学西二在线工作室</div>
-                                <div class="text-claude-muted text-sm">AI 方向正式成员</div>
-                            </div>
-                            <div class="timeline-item">
-                                <div class="text-white font-medium">福州大学 ACM 服务外包实验室</div>
-                                <div class="text-claude-muted text-sm">实验室成员</div>
-                            </div>
-                            <div class="timeline-item">
-                                <div class="text-white font-medium">Stanford CS231n 课程学习</div>
-                                <div class="text-claude-muted text-sm">系统学习计算机视觉，完成课程笔记仓库</div>
-                            </div>
-                            <div class="timeline-item">
-                                <div class="text-white font-medium">GPT-2 模型复现</div>
-                                <div class="text-claude-muted text-sm">从零实现 Transformer 架构与训练流程</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pt-6 border-t border-claude-border mt-8 flex flex-col md:flex-row gap-8">
-                        <div>
-                            <h3 class="text-white font-serif text-lg mb-3">技术栈</h3>
-                            <ul class="text-claude-muted space-y-2 text-sm">
-                                <li>Python</li>
-                                <li>PyTorch</li>
-                                <li>NumPy / Pandas / Matplotlib</li>
-                                <li> Vibe-Coding </li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 class="text-white font-serif text-lg mb-3">研究方向</h3>
-                            <ul class="text-claude-muted space-y-2 text-sm">
-                                <li>计算机视觉 (CV)</li>
-                                <li>自然语言处理 (NLP)</li>
-                                <li>大语言模型 (LLM)</li>
-                                <li>数学建模</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+      <!-- Awards -->
+      <section
+        id="awards"
+        class="py-24 md:py-32 border-t border-claude-border reveal"
+      >
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+          <div class="md:col-span-1">
+            <h2
+              class="text-sm font-medium text-claude-muted tracking-widest uppercase mb-4"
+            >
+              / Awards
+            </h2>
+            <h3 class="text-2xl md:text-3xl font-serif text-claude-heading">
+              竞赛荣誉
+            </h3>
+          </div>
+          <div class="md:col-span-3">
+            <div class="flex flex-wrap gap-3">
+              <span class="award-tag">
+                <i data-lucide="trophy" class="w-3.5 h-3.5 award-level-1"></i>
+                数学建模国赛 · 省一等奖
+              </span>
+              <span class="award-tag">
+                <i data-lucide="trophy" class="w-3.5 h-3.5 award-level-2"></i>
+                电工杯数学建模 · 二等奖
+              </span>
+              <span class="award-tag">
+                <i data-lucide="trophy" class="w-3.5 h-3.5 award-level-2"></i>
+                计算机设计大赛 · 省二等奖
+              </span>
+              <span class="award-tag">
+                <i data-lucide="trophy" class="w-3.5 h-3.5 award-level-3"></i>
+                美国大学生数学建模竞赛 · H奖
+              </span>
+              <span class="award-tag">
+                <i data-lucide="trophy" class="w-3.5 h-3.5 award-level-3"></i>
+                服务外包创新大赛 · 省三等奖
+              </span>
+              <span class="award-tag">
+                <i data-lucide="trophy" class="w-3.5 h-3.5 award-level-3"></i>
+                蓝桥杯 Python · 省三等奖
+              </span>
             </div>
-        </section>
+            <p class="text-claude-muted text-sm mt-6">以上均为 2025 年度获得</p>
+          </div>
+        </div>
+      </section>
 
-        <!-- Awards -->
-        <section id="awards" class="py-24 md:py-32 border-t border-claude-border reveal">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
-                <div class="md:col-span-1">
-                    <h2 class="text-sm font-medium text-claude-muted tracking-widest uppercase mb-4">/ Awards</h2>
-                    <h3 class="text-2xl md:text-3xl font-serif text-white">竞赛荣誉</h3>
-                </div>
-                <div class="md:col-span-3">
-                    <div class="flex flex-wrap gap-3">
-                        <span class="award-tag">
-                            <i data-lucide="trophy" class="w-3.5 h-3.5 award-level-1"></i>
-                            数学建模国赛 · 省一等奖
-                        </span>
-                        <span class="award-tag">
-                            <i data-lucide="trophy" class="w-3.5 h-3.5 award-level-2"></i>
-                            电工杯数学建模 · 二等奖
-                        </span>
-                        <span class="award-tag">
-                            <i data-lucide="trophy" class="w-3.5 h-3.5 award-level-2"></i>
-                            计算机设计大赛 · 省二等奖
-                        </span>
-                        <span class="award-tag">
-                            <i data-lucide="trophy" class="w-3.5 h-3.5 award-level-3"></i>
-                            美国大学生数学建模竞赛 · H奖
-                        </span>
-                        <span class="award-tag">
-                            <i data-lucide="trophy" class="w-3.5 h-3.5 award-level-3"></i>
-                            服务外包创新大赛 · 省三等奖
-                        </span>
-                        <span class="award-tag">
-                            <i data-lucide="trophy" class="w-3.5 h-3.5 award-level-3"></i>
-                            蓝桥杯 Python · 省三等奖
-                        </span>
-                    </div>
-                    <p class="text-claude-muted text-sm mt-6">以上均为 2025 年度获得</p>
-                </div>
-            </div>
-        </section>
+      <!-- Projects -->
+      <section
+        id="projects"
+        class="py-24 md:py-32 border-t border-claude-border reveal"
+      >
+        <div class="flex justify-between items-end mb-16">
+          <div>
+            <h2
+              class="text-sm font-medium text-claude-muted tracking-widest uppercase mb-4"
+            >
+              / Projects
+            </h2>
+            <h3 class="text-3xl md:text-4xl font-serif text-claude-heading">
+              开源与实践
+            </h3>
+          </div>
+          <a
+            href="https://github.com/MieSheeeep"
+            target="_blank"
+            class="hidden md:flex items-center gap-2 text-claude-muted hover:text-claude-accent transition-colors text-sm"
+          >
+            View all on GitHub <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+        </div>
 
-        <!-- Projects -->
-        <section id="projects" class="py-24 md:py-32 border-t border-claude-border reveal">
-            <div class="flex justify-between items-end mb-16">
-                <div>
-                    <h2 class="text-sm font-medium text-claude-muted tracking-widest uppercase mb-4">/ Projects</h2>
-                    <h3 class="text-3xl md:text-4xl font-serif text-white">开源与实践</h3>
-                </div>
-                <a href="https://github.com/MieSheeeep" target="_blank"
-                    class="hidden md:flex items-center gap-2 text-claude-muted hover:text-claude-accent transition-colors text-sm">
-                    View all on GitHub <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                </a>
-            </div>
+        <div
+          id="github-projects-container"
+          class="grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
+          <div
+            class="p-8 rounded-2xl bg-claude-surface border border-claude-border animate-pulse flex flex-col items-center justify-center min-h-[220px]"
+          >
+            <i
+              data-lucide="loader-2"
+              class="w-6 h-6 animate-spin text-claude-muted mb-3"
+            ></i>
+            <span class="text-sm text-claude-muted font-mono"
+              >Fetching latest works...</span
+            >
+          </div>
+        </div>
+      </section>
 
-            <div id="github-projects-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div
-                    class="p-8 rounded-2xl bg-claude-surface border border-claude-border animate-pulse flex flex-col items-center justify-center min-h-[220px]">
-                    <i data-lucide="loader-2" class="w-6 h-6 animate-spin text-claude-muted mb-3"></i>
-                    <span class="text-sm text-claude-muted font-mono">Fetching latest works...</span>
-                </div>
-            </div>
-        </section>
+      <!-- Blog -->
+      <section
+        id="blog"
+        class="py-24 md:py-32 border-t border-claude-border reveal mb-20"
+      >
+        <div class="flex justify-between items-end mb-16">
+          <div>
+            <h2
+              class="text-sm font-medium text-claude-muted tracking-widest uppercase mb-4"
+            >
+              / Blog
+            </h2>
+            <h3 class="text-3xl md:text-4xl font-serif text-claude-heading">
+              思考与记录
+            </h3>
+          </div>
+        </div>
 
-        <!-- Blog -->
-        <section id="blog" class="py-24 md:py-32 border-t border-claude-border reveal mb-20">
-            <div class="flex justify-between items-end mb-16">
-                <div>
-                    <h2 class="text-sm font-medium text-claude-muted tracking-widest uppercase mb-4">/ Blog</h2>
-                    <h3 class="text-3xl md:text-4xl font-serif text-white">思考与记录</h3>
-                </div>
-            </div>
-
-            <div class="border-t border-claude-border" id="blog-container">
-                <div class="py-8 text-claude-muted text-sm flex items-center gap-2">
-                    <i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>
-                    加载文章列表...
-                </div>
-            </div>
-        </section>
-
+        <div class="border-t border-claude-border" id="blog-container">
+          <div class="py-8 text-claude-muted text-sm flex items-center gap-2">
+            <i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>
+            加载文章列表...
+          </div>
+        </div>
+      </section>
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-claude-border bg-claude-bg py-12 text-center relative z-10">
-        <div
-            class="max-w-4xl mx-auto px-6 md:px-12 flex flex-col-reverse md:flex-row justify-between items-center gap-6">
-            <p class="text-claude-muted text-sm flex items-center gap-2">
-                &copy; <span id="year"></span> MieSheeeep. Built with passion for ML.
-            </p>
-            <div class="flex gap-6 text-sm text-claude-muted">
-                <a href="https://github.com/MieSheeeep" target="_blank"
-                    class="hover:text-claude-accent transition-colors">GitHub</a>
-                <a href="mailto:3224782312@qq.com" class="hover:text-claude-accent transition-colors">Email</a>
-            </div>
+    <footer
+      class="border-t border-claude-border bg-claude-bg py-12 text-center relative z-10"
+    >
+      <div
+        class="max-w-4xl mx-auto px-6 md:px-12 flex flex-col-reverse md:flex-row justify-between items-center gap-6"
+      >
+        <p class="text-claude-muted text-sm flex items-center gap-2">
+          &copy; <span id="year"></span> MieSheeeep. Built with passion for ML.
+        </p>
+        <div class="flex gap-6 text-sm text-claude-muted">
+          <a
+            href="https://github.com/MieSheeeep"
+            target="_blank"
+            class="hover:text-claude-accent transition-colors"
+            >GitHub</a
+          >
+          <a
+            href="mailto:3224782312@qq.com"
+            class="hover:text-claude-accent transition-colors"
+            >Email</a
+          >
         </div>
+      </div>
     </footer>
 
     <script>
-        // ===== 主题系统 =====
-        function getTheme() {
-            const saved = localStorage.getItem('theme');
-            if (saved) return saved;
-            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      // ===== 主题系统 =====
+      function getTheme() {
+        const saved = localStorage.getItem("theme");
+        if (saved) return saved;
+        return window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+      }
+
+      function applyTheme(theme) {
+        const html = document.documentElement;
+        html.classList.add("theme-transitioning");
+        if (theme === "dark") {
+          html.classList.add("dark");
+        } else {
+          html.classList.remove("dark");
         }
+        localStorage.setItem("theme", theme);
+        setTimeout(() => html.classList.remove("theme-transitioning"), 500);
+      }
 
-        function applyTheme(theme) {
-            const html = document.documentElement;
-            html.classList.add('theme-transitioning');
-            if (theme === 'dark') {
-                html.classList.add('dark');
-            } else {
-                html.classList.remove('dark');
-            }
-            localStorage.setItem('theme', theme);
-            // 移除过渡类，防止影响其他动画
-            setTimeout(() => html.classList.remove('theme-transitioning'), 500);
+      function toggleTheme() {
+        const current = document.documentElement.classList.contains("dark")
+          ? "dark"
+          : "light";
+        applyTheme(current === "dark" ? "light" : "dark");
+        lucide.createIcons();
+      }
+
+      applyTheme(getTheme());
+
+      // ===== 自定义光标 =====
+      const dot = document.getElementById("cursor-dot");
+      const ring = document.getElementById("cursor-ring");
+      let mouseX = -100,
+        mouseY = -100;
+      let ringX = -100,
+        ringY = -100;
+
+      document.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        dot.style.left = mouseX + "px";
+        dot.style.top = mouseY + "px";
+      });
+
+      function animateRing() {
+        ringX += (mouseX - ringX) * 0.15;
+        ringY += (mouseY - ringY) * 0.15;
+        ring.style.left = ringX + "px";
+        ring.style.top = ringY + "px";
+        requestAnimationFrame(animateRing);
+      }
+      animateRing();
+
+      document.addEventListener("mouseover", (e) => {
+        const interactive = e.target.closest(
+          'a, button, input, textarea, [role="button"]',
+        );
+        if (interactive) {
+          dot.classList.add("hover");
+          ring.classList.add("hover");
         }
-
-        function toggleTheme() {
-            const current = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-            applyTheme(current === 'dark' ? 'light' : 'dark');
-            lucide.createIcons();
+      });
+      document.addEventListener("mouseout", (e) => {
+        const interactive = e.target.closest(
+          'a, button, input, textarea, [role="button"]',
+        );
+        if (interactive) {
+          dot.classList.remove("hover");
+          ring.classList.remove("hover");
         }
+      });
 
-        // 初始应用主题（无动画）
-        applyTheme(getTheme());
+      document.addEventListener("mouseleave", () => {
+        dot.style.opacity = "0";
+        ring.style.opacity = "0";
+      });
+      document.addEventListener("mouseenter", () => {
+        dot.style.opacity = "1";
+        ring.style.opacity = "1";
+      });
 
-        // ===== 自定义光标 =====
-        const dot = document.getElementById('cursor-dot');
-        const ring = document.getElementById('cursor-ring');
-        let mouseX = -100, mouseY = -100;
-        let ringX = -100, ringY = -100;
+      // ===== 点击特效 =====
+      document.addEventListener("mousedown", (e) => {
+        ring.classList.add("clicking");
 
-        document.addEventListener('mousemove', e => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            dot.style.left = mouseX + 'px';
-            dot.style.top = mouseY + 'px';
-        });
+        const ripple = document.createElement("div");
+        ripple.className = "click-ripple";
+        ripple.style.left = e.clientX + "px";
+        ripple.style.top = e.clientY + "px";
+        document.body.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
 
-        // 光标环跟随动画（有延迟的弹性跟随）
-        function animateRing() {
-            ringX += (mouseX - ringX) * 0.15;
-            ringY += (mouseY - ringY) * 0.15;
-            ring.style.left = ringX + 'px';
-            ring.style.top = ringY + 'px';
-            requestAnimationFrame(animateRing);
+        for (let i = 0; i < 5; i++) {
+          const p = document.createElement("div");
+          p.className = "click-particle";
+          p.style.left = e.clientX + "px";
+          p.style.top = e.clientY + "px";
+          document.body.appendChild(p);
+
+          const angle = (Math.PI * 2 * i) / 5 + (Math.random() * 0.5 - 0.25);
+          const velocity = 25 + Math.random() * 15;
+          const tx = Math.cos(angle) * velocity;
+          const ty = Math.sin(angle) * velocity;
+
+          p.animate(
+            [
+              { transform: `translate(-50%, -50%) scale(1)`, opacity: 0.8 },
+              {
+                transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0)`,
+                opacity: 0,
+              },
+            ],
+            {
+              duration: 400 + Math.random() * 200,
+              easing: "cubic-bezier(0.19, 1, 0.22, 1)",
+            },
+          ).onfinish = () => p.remove();
         }
-        animateRing();
+      });
+      document.addEventListener("mouseup", () => {
+        ring.classList.remove("clicking");
+      });
 
-        // 悬浮在可交互元素上时放大光标
-        document.addEventListener('mouseover', e => {
-            const interactive = e.target.closest('a, button, input, textarea, [role="button"]');
-            if (interactive) {
-                dot.classList.add('hover');
-                ring.classList.add('hover');
+      document.getElementById("year").textContent = new Date().getFullYear();
+      document
+        .getElementById("theme-toggle")
+        .addEventListener("click", toggleTheme);
+      document
+        .getElementById("theme-toggle-mobile")
+        .addEventListener("click", toggleTheme);
+
+      document.getElementById("menu-btn").addEventListener("click", () => {
+        document.getElementById("mobile-menu").classList.toggle("open");
+      });
+      document.querySelectorAll("#mobile-menu a").forEach((a) => {
+        a.addEventListener("click", () => {
+          document.getElementById("mobile-menu").classList.remove("open");
+        });
+      });
+
+      window.addEventListener("scroll", () => {
+        const nav = document.getElementById("navbar");
+        nav.classList.toggle("scrolled", window.scrollY > 50);
+      });
+
+      const revealObserver = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("active");
+              observer.unobserve(entry.target);
             }
-        });
-        document.addEventListener('mouseout', e => {
-            const interactive = e.target.closest('a, button, input, textarea, [role="button"]');
-            if (interactive) {
-                dot.classList.remove('hover');
-                ring.classList.remove('hover');
-            }
-        });
+          });
+        },
+        { threshold: 0.15, rootMargin: "0px 0px -50px 0px" },
+      );
+      document
+        .querySelectorAll(".reveal")
+        .forEach((el) => revealObserver.observe(el));
 
-        // 鼠标离开/进入窗口
-        document.addEventListener('mouseleave', () => {
-            dot.style.opacity = '0';
-            ring.style.opacity = '0';
-        });
-        document.addEventListener('mouseenter', () => {
-            dot.style.opacity = '1';
-            ring.style.opacity = '1';
-        });
+      async function loadBlogPosts() {
+        const container = document.getElementById("blog-container");
+        try {
+          const res = await fetch("posts/posts.json");
+          if (!res.ok) throw new Error("No posts found");
+          const posts = await res.json();
 
-        // ===== 点击特效 =====
-        document.addEventListener('mousedown', (e) => {
-            // 光标缩小
-            ring.classList.add('clicking');
+          if (posts.length === 0) {
+            container.innerHTML =
+              '<div class="py-8 text-claude-muted text-sm border-b border-claude-border">暂无文章</div>';
+            return;
+          }
 
-            // 产生波纹
-            const ripple = document.createElement('div');
-            ripple.className = 'click-ripple';
-            ripple.style.left = e.clientX + 'px';
-            ripple.style.top = e.clientY + 'px';
-            document.body.appendChild(ripple);
-            setTimeout(() => ripple.remove(), 600);
-
-            // 产生爆炸散开粒子
-            for (let i = 0; i < 5; i++) {
-                const p = document.createElement('div');
-                p.className = 'click-particle';
-                p.style.left = e.clientX + 'px';
-                p.style.top = e.clientY + 'px';
-                document.body.appendChild(p);
-
-                // 引入一定的随机角度和速度
-                const angle = (Math.PI * 2 * i) / 5 + (Math.random() * 0.5 - 0.25);
-                const velocity = 25 + Math.random() * 15;
-                const tx = Math.cos(angle) * velocity;
-                const ty = Math.sin(angle) * velocity;
-
-                // 使用 Web Animations API
-                p.animate([
-                    { transform: `translate(-50%, -50%) scale(1)`, opacity: 0.8 },
-                    { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0)`, opacity: 0 }
-                ], {
-                    duration: 400 + Math.random() * 200,
-                    easing: 'cubic-bezier(0.19, 1, 0.22, 1)'
-                }).onfinish = () => p.remove();
-            }
-        });
-        document.addEventListener('mouseup', () => {
-            ring.classList.remove('clicking');
-        });
-
-        // 年份
-        document.getElementById('year').textContent = new Date().getFullYear();
-
-        // 主题切换按钮
-        document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
-        document.getElementById('theme-toggle-mobile').addEventListener('click', toggleTheme);
-
-        // 移动端菜单切换
-        document.getElementById('menu-btn').addEventListener('click', () => {
-            document.getElementById('mobile-menu').classList.toggle('open');
-        });
-        document.querySelectorAll('#mobile-menu a').forEach(a => {
-            a.addEventListener('click', () => {
-                document.getElementById('mobile-menu').classList.remove('open');
-            });
-        });
-
-        // Navbar 滚动
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('navbar');
-            nav.classList.toggle('scrolled', window.scrollY > 50);
-        });
-
-        // 滚动渐显
-        const revealObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
-        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-        /**
-         * 博客系统：从 posts/posts.json 加载文章列表
-         */
-        async function loadBlogPosts() {
-            const container = document.getElementById('blog-container');
-            try {
-                const res = await fetch('posts/posts.json');
-                if (!res.ok) throw new Error('No posts found');
-                const posts = await res.json();
-
-                if (posts.length === 0) {
-                    container.innerHTML = '<div class="py-8 text-claude-muted text-sm border-b border-claude-border">暂无文章</div>';
-                    return;
-                }
-
-                container.innerHTML = posts.map(post => `
+          container.innerHTML = posts
+            .map(
+              (post) => `
                     <a href="post.html?slug=${post.slug}" class="group block flex flex-col md:flex-row md:items-center py-6 border-b border-claude-border hover:bg-claude-surface/30 px-4 -mx-4 rounded-xl transition-all duration-300">
                         <div class="md:w-32 flex-shrink-0 text-sm text-claude-muted font-mono mb-2 md:mb-0">
                             ${post.date}
@@ -805,36 +961,41 @@
                             <h4 class="text-lg text-claude-text group-hover:text-claude-accent transition-colors font-medium">
                                 ${post.title}
                             </h4>
-                            ${post.tags ? `<div class="flex gap-2 mt-1">${post.tags.map(t => `<span class="text-xs text-claude-muted bg-claude-surface px-2 py-0.5 rounded">${t}</span>`).join('')}</div>` : ''}
+                            ${post.tags ? `<div class="flex gap-2 mt-1">${post.tags.map((t) => `<span class="text-xs text-claude-muted bg-claude-surface px-2 py-0.5 rounded">${t}</span>`).join("")}</div>` : ""}
                         </div>
                         <div class="flex-shrink-0 text-claude-muted pl-4 opacity-0 group-hover:opacity-100 transition-opacity hidden md:block">
                             <i data-lucide="arrow-right" class="w-5 h-5"></i>
                         </div>
                     </a>
-                `).join('');
-                lucide.createIcons();
-            } catch (e) {
-                container.innerHTML = '<div class="py-8 text-claude-muted text-sm border-b border-claude-border">暂无文章，敬请期待</div>';
-            }
+                `,
+            )
+            .join("");
+          lucide.createIcons();
+        } catch (e) {
+          container.innerHTML =
+            '<div class="py-8 text-claude-muted text-sm border-b border-claude-border">暂无文章，敬请期待</div>';
         }
+      }
 
-        /**
-         * GitHub 项目
-         */
-        async function fetchGitHubProjects(username) {
-            const container = document.getElementById('github-projects-container');
-            try {
-                const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`);
-                if (!res.ok) throw new Error('Failed to fetch');
-                const repos = await res.json();
-                const topRepos = repos.filter(repo => !repo.fork).slice(0, 4);
+      async function fetchGitHubProjects(username) {
+        const container = document.getElementById("github-projects-container");
+        try {
+          const res = await fetch(
+            `https://api.github.com/users/${username}/repos?sort=updated&per_page=6`,
+          );
+          if (!res.ok) throw new Error("Failed to fetch");
+          const repos = await res.json();
+          const topRepos = repos.filter((repo) => !repo.fork).slice(0, 4);
 
-                if (topRepos.length === 0) {
-                    container.innerHTML = '<div class="col-span-full py-12 text-center text-claude-muted">暂无公开仓库</div>';
-                    return;
-                }
+          if (topRepos.length === 0) {
+            container.innerHTML =
+              '<div class="col-span-full py-12 text-center text-claude-muted">暂无公开仓库</div>';
+            return;
+          }
 
-                container.innerHTML = topRepos.map(repo => `
+          container.innerHTML = topRepos
+            .map(
+              (repo) => `
                     <a href="${repo.html_url}" target="_blank" class="group relative flex flex-col justify-between p-8 rounded-2xl bg-claude-surface border border-claude-border hover:border-claude-accent/50 hover:bg-claude-surfaceHover transition-all duration-500 overflow-hidden">
                         <div class="absolute inset-0 bg-gradient-to-br from-claude-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                         <div class="relative z-10">
@@ -842,33 +1003,33 @@
                                 <i data-lucide="folder-code" class="w-8 h-8 text-claude-muted group-hover:text-claude-accent transition-colors duration-300"></i>
                                 <i data-lucide="arrow-up-right" class="w-5 h-5 text-claude-border group-hover:text-claude-accent transition-colors duration-300"></i>
                             </div>
-                            <h3 class="text-xl font-serif text-white mb-3 group-hover:text-claude-accent transition-colors duration-300">${repo.name}</h3>
-                            <p class="text-sm text-claude-muted leading-relaxed line-clamp-3 mb-6">${repo.description || '暂无描述'}</p>
+                            <h3 class="text-xl font-serif text-claude-heading mb-3 group-hover:text-claude-accent transition-colors duration-300">${repo.name}</h3>
+                            <p class="text-sm text-claude-muted leading-relaxed line-clamp-3 mb-6">${repo.description || "暂无描述"}</p>
                         </div>
                         <div class="relative z-10 flex justify-between items-center pt-4 border-t border-claude-border/50">
                             <div class="flex items-center gap-2">
                                 <span class="w-2 h-2 rounded-full bg-claude-muted group-hover:bg-claude-accent transition-colors"></span>
-                                <span class="text-xs text-claude-muted">${repo.language || 'Markdown'}</span>
+                                <span class="text-xs text-claude-muted">${repo.language || "Markdown"}</span>
                             </div>
                             <span class="text-xs text-claude-muted flex items-center gap-1">
                                 <i data-lucide="star" class="w-3.5 h-3.5"></i> ${repo.stargazers_count}
                             </span>
                         </div>
                     </a>
-                `).join('');
-                lucide.createIcons();
-            } catch (err) {
-                container.innerHTML = `<div class="col-span-full py-12 text-center text-claude-muted">GitHub 加载失败: ${err.message}</div>`;
-            }
+                `,
+            )
+            .join("");
+          lucide.createIcons();
+        } catch (err) {
+          container.innerHTML = `<div class="col-span-full py-12 text-center text-claude-muted">GitHub 加载失败: ${err.message}</div>`;
         }
+      }
 
-        // 初始化
-        document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-            loadBlogPosts();
-            fetchGitHubProjects('MieSheeeep');
-        });
+      document.addEventListener("DOMContentLoaded", () => {
+        lucide.createIcons();
+        loadBlogPosts();
+        fetchGitHubProjects("MieSheeeep");
+      });
     </script>
-</body>
-
+  </body>
 </html>
