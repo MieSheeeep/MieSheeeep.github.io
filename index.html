@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html lang="zh-CN" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MieSheeeep | 个人主页</title>
-    
-    <!-- Google Fonts 引入: Inter (Sans-serif) 与 Noto Serif SC (Serif) -->
+    <title>MieSheeeep | Machine Learning</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- Tailwind 配置 -->
     <script>
         tailwind.config = {
             theme: {
@@ -26,7 +24,6 @@
                         serif: ['"Noto Serif SC"', 'ui-serif', 'Georgia', 'Cambria', 'serif'],
                     },
                     colors: {
-                        // 采用 Anthropic / Claude 的经典暖暗色调配色板
                         claude: {
                             bg: '#141414',
                             surface: '#1F1E1D',
@@ -34,7 +31,7 @@
                             border: '#333130',
                             text: '#D6D2CC',
                             muted: '#8E8A85',
-                            accent: '#D97757', /* 标志性的柔和琥珀色/蜜桃色 */
+                            accent: '#D97757',
                             accentHover: '#E38859'
                         }
                     }
@@ -45,35 +42,23 @@
 
     <style>
         body {
-            background-color: #141414; /* claude.bg */
-            color: #D6D2CC; /* claude.text */
+            background-color: #141414;
+            color: #D6D2CC;
             font-family: 'Inter', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* 隐藏滚动条但保留滚动效果 */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #141414;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #333130;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #8E8A85;
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #141414; }
+        ::-webkit-scrollbar-thumb { background: #333130; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #8E8A85; }
 
-        /* 文字高亮颜色 */
         ::selection {
             background-color: rgba(217, 119, 87, 0.3);
             color: #fff;
         }
 
-        /* 滚动渐显动画 */
         .reveal {
             opacity: 0;
             transform: translateY(30px);
@@ -84,7 +69,6 @@
             transform: translateY(0);
         }
 
-        /* 毛玻璃导航栏（低调版） */
         .nav-blur {
             background: rgba(20, 20, 20, 0.85);
             backdrop-filter: blur(12px);
@@ -93,61 +77,147 @@
             transition: border-color 0.3s ease;
         }
         .nav-blur.scrolled {
-            border-bottom: 1px solid #333130; /* claude.border */
+            border-bottom: 1px solid #333130;
+        }
+
+        /* 移动端菜单 */
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .mobile-menu.open {
+            max-height: 300px;
+        }
+
+        /* 奖项徽章 */
+        .award-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            border: 1px solid #333130;
+            background: #1F1E1D;
+            color: #D6D2CC;
+            transition: all 0.3s;
+        }
+        .award-tag:hover {
+            border-color: rgba(217, 119, 87, 0.5);
+            background: #2A2928;
+        }
+        .award-level-1 { color: #F59E0B; }
+        .award-level-2 { color: #D97757; }
+        .award-level-3 { color: #8E8A85; }
+
+        @keyframes scrolldown {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(200%); }
+        }
+
+        /* 时间线 */
+        .timeline-item {
+            position: relative;
+            padding-left: 28px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #D97757;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 3.5px;
+            top: 20px;
+            width: 1px;
+            height: calc(100% - 8px);
+            background: #333130;
+        }
+        .timeline-item:last-child::after {
+            display: none;
         }
     </style>
 </head>
+
 <body class="selection:bg-claude-accent/30 tracking-wide font-light">
 
     <!-- 顶部导航 -->
-    <header id="navbar" class="fixed top-0 w-full z-50 nav-blur py-4 px-6 md:px-12 flex justify-between items-center">
-        <a href="#" class="font-serif text-lg font-medium tracking-wider text-claude-text hover:text-claude-accent transition-colors duration-300">
-            MieSheeeep.
-        </a>
-        <nav class="hidden md:flex gap-8 text-sm text-claude-muted">
-            <a href="#about" class="hover:text-claude-text transition-colors duration-300">About</a>
-            <a href="#projects" class="hover:text-claude-text transition-colors duration-300">Projects</a>
-            <a href="#writing" class="hover:text-claude-text transition-colors duration-300">Writing</a>
-        </nav>
-        <button class="md:hidden text-claude-muted hover:text-claude-text">
-            <i data-lucide="menu" class="w-5 h-5"></i>
-        </button>
+    <header id="navbar" class="fixed top-0 w-full z-50 nav-blur">
+        <div class="py-4 px-6 md:px-12 flex justify-between items-center">
+            <a href="#"
+                class="font-serif text-lg font-medium tracking-wider text-claude-text hover:text-claude-accent transition-colors duration-300">
+                MieSheeeep.
+            </a>
+            <nav class="hidden md:flex gap-8 text-sm text-claude-muted">
+                <a href="#about" class="hover:text-claude-text transition-colors duration-300">About</a>
+                <a href="#awards" class="hover:text-claude-text transition-colors duration-300">Awards</a>
+                <a href="#projects" class="hover:text-claude-text transition-colors duration-300">Projects</a>
+                <a href="#blog" class="hover:text-claude-text transition-colors duration-300">Blog</a>
+            </nav>
+            <button id="menu-btn" class="md:hidden text-claude-muted hover:text-claude-text">
+                <i data-lucide="menu" class="w-5 h-5"></i>
+            </button>
+        </div>
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="mobile-menu md:hidden px-6 pb-4">
+            <nav class="flex flex-col gap-4 text-sm text-claude-muted">
+                <a href="#about" class="hover:text-claude-text transition-colors">About</a>
+                <a href="#awards" class="hover:text-claude-text transition-colors">Awards</a>
+                <a href="#projects" class="hover:text-claude-text transition-colors">Projects</a>
+                <a href="#blog" class="hover:text-claude-text transition-colors">Blog</a>
+            </nav>
+        </div>
     </header>
 
     <!-- 主容器 -->
     <main class="max-w-4xl mx-auto px-6 md:px-12">
-        
-        <!-- 1. Hero 置顶区域 (全屏高度) -->
+
+        <!-- Hero -->
         <section id="hero" class="min-h-screen flex flex-col justify-center relative reveal active">
             <div class="space-y-6 md:space-y-8">
-                <!-- 标志性颜色点缀 -->
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-[1px] bg-claude-accent"></div>
-                    <span class="text-claude-accent font-medium text-sm tracking-widest uppercase">Software Engineer</span>
+                    <span class="text-claude-accent font-medium text-sm tracking-widest uppercase">Machine Learning</span>
                 </div>
-                
+
                 <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif font-medium leading-tight tracking-tight text-white">
-                    Crafting <br />
-                    <span class="text-claude-muted font-normal italic">intelligent</span> systems.
+                    Exploring <br />
+                    <span class="text-claude-muted font-normal italic">intelligent</span> frontiers.
                 </h1>
-                
+
                 <p class="text-claude-muted text-lg md:text-xl max-w-2xl leading-relaxed mt-6">
-                    你好，我是 MieSheeeep。<br class="hidden md:block"/>
-                    我致力于将复杂的技术收敛于极致极简与优雅的交互之中，专注于全栈开发与智能化产品的探索。
+                    你好，我是 MieSheeeep。<br class="hidden md:block" />
+                    福州大学计算机学院在读，专注于机器学习与深度学习研究。<br />
+                    热衷于探索 AI 的边界，从理论到实践，从复现到创新。
                 </p>
 
                 <div class="pt-8 flex gap-6 items-center">
-                    <a href="#projects" class="group flex items-center gap-2 text-sm font-medium text-claude-text hover:text-claude-accent transition-colors duration-300 pb-1 border-b border-transparent hover:border-claude-accent">
-                        查看项目 <i data-lucide="arrow-down-right" class="w-4 h-4 group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform"></i>
+                    <a href="#projects"
+                        class="group flex items-center gap-2 text-sm font-medium text-claude-text hover:text-claude-accent transition-colors duration-300 pb-1 border-b border-transparent hover:border-claude-accent">
+                        查看项目 <i data-lucide="arrow-down-right"
+                            class="w-4 h-4 group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform"></i>
+                    </a>
+                    <a href="#blog"
+                        class="group flex items-center gap-2 text-sm font-medium text-claude-text hover:text-claude-accent transition-colors duration-300 pb-1 border-b border-transparent hover:border-claude-accent">
+                        阅读博客 <i data-lucide="arrow-down-right"
+                            class="w-4 h-4 group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform"></i>
                     </a>
                     <div class="flex items-center gap-4 text-claude-muted">
-                        <a href="https://github.com/MieSheeeep" target="_blank" class="hover:text-claude-text transition-colors"><i data-lucide="github" class="w-5 h-5"></i></a>
-                        <a href="mailto:hello@example.com" class="hover:text-claude-text transition-colors"><i data-lucide="mail" class="w-5 h-5"></i></a>
+                        <a href="https://github.com/MieSheeeep" target="_blank"
+                            class="hover:text-claude-text transition-colors"><i data-lucide="github" class="w-5 h-5"></i></a>
+                        <a href="mailto:hello@example.com" class="hover:text-claude-text transition-colors"><i
+                                data-lucide="mail" class="w-5 h-5"></i></a>
                     </div>
                 </div>
             </div>
 
-            <!-- 向下滚动提示 -->
             <div class="absolute bottom-12 left-0 flex items-center gap-3 text-claude-muted text-xs tracking-widest uppercase opacity-60">
                 <div class="w-[1px] h-12 bg-claude-border overflow-hidden relative">
                     <div class="absolute top-0 left-0 w-full h-1/2 bg-claude-accent animate-[scrolldown_2s_ease-in-out_infinite]"></div>
@@ -156,7 +226,7 @@
             </div>
         </section>
 
-        <!-- 2. 关于与理念 (About) -->
+        <!-- About -->
         <section id="about" class="py-24 md:py-32 reveal">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
                 <div class="md:col-span-1">
@@ -164,27 +234,52 @@
                 </div>
                 <div class="md:col-span-3 space-y-8 text-claude-text leading-relaxed text-base md:text-lg">
                     <p>
-                        在数字世界中，我始终相信“美学（Aesthetics）”与“工程（Engineering）”是从不割裂的整体。优秀的代码应当如同优美的散文一般，结构清晰、逻辑严密，充满诗意。
+                        我是一名福州大学大二学生，对机器学习与人工智能充满热情。从 CS231n 的系统学习，到 GPT-2 的从零复现，我始终相信 —— 理解原理、动手实践，才是掌握 AI 最扎实的路径。
                     </p>
                     <p>
-                        过去几年中，我深耕于 Web 架构与后端效能优化。从构建高并发的微服务系统，到打磨像素级完美的响应式前端界面，我享受创造带来的心流反馈。
+                        目前我是<span class="text-claude-accent font-medium">福州大学西二在线工作室 AI 方向正式成员</span>，同时也是<span class="text-claude-accent font-medium">福州大学 ACM 服务外包实验室成员</span>。在团队中参与多个 AI 相关项目的研发与竞赛实践。
                     </p>
+
+                    <!-- 经历时间线 -->
+                    <div class="pt-6 border-t border-claude-border mt-8">
+                        <h3 class="text-white font-serif text-lg mb-6">经历</h3>
+                        <div class="space-y-6">
+                            <div class="timeline-item">
+                                <div class="text-white font-medium">福州大学西二在线工作室</div>
+                                <div class="text-claude-muted text-sm">AI 方向正式成员</div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="text-white font-medium">福州大学 ACM 服务外包实验室</div>
+                                <div class="text-claude-muted text-sm">实验室成员</div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="text-white font-medium">Stanford CS231n 课程学习</div>
+                                <div class="text-claude-muted text-sm">系统学习计算机视觉，完成课程笔记仓库</div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="text-white font-medium">GPT-2 模型复现</div>
+                                <div class="text-claude-muted text-sm">从零实现 Transformer 架构与训练流程</div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="pt-6 border-t border-claude-border mt-8 flex flex-col md:flex-row gap-8">
                         <div>
                             <h3 class="text-white font-serif text-lg mb-3">技术栈</h3>
                             <ul class="text-claude-muted space-y-2 text-sm">
-                                <li>TypeScript / JavaScript</li>
-                                <li>React / Next.js / Vue</li>
-                                <li>Node.js / Go / Python</li>
-                                <li>Tailwind CSS / UI Design</li>
+                                <li>Python / C++</li>
+                                <li>PyTorch / TensorFlow</li>
+                                <li>Transformer / LLM</li>
+                                <li>NumPy / Pandas / Matplotlib</li>
                             </ul>
                         </div>
                         <div>
-                            <h3 class="text-white font-serif text-lg mb-3">探索领域</h3>
+                            <h3 class="text-white font-serif text-lg mb-3">研究方向</h3>
                             <ul class="text-claude-muted space-y-2 text-sm">
-                                <li>大模型(LLM) 应用层构建</li>
-                                <li>高并发后端架构</li>
-                                <li>人机交互设计 (HCI)</li>
+                                <li>计算机视觉 (CV)</li>
+                                <li>自然语言处理 (NLP)</li>
+                                <li>大语言模型 (LLM)</li>
+                                <li>数学建模</li>
                             </ul>
                         </div>
                     </div>
@@ -192,21 +287,59 @@
             </div>
         </section>
 
-        <!-- 3. 精选项目 (Selected Projects) -->
+        <!-- Awards -->
+        <section id="awards" class="py-24 md:py-32 border-t border-claude-border reveal">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div class="md:col-span-1">
+                    <h2 class="text-sm font-medium text-claude-muted tracking-widest uppercase mb-4">/ Awards</h2>
+                    <h3 class="text-2xl md:text-3xl font-serif text-white">竞赛荣誉</h3>
+                </div>
+                <div class="md:col-span-3">
+                    <div class="flex flex-wrap gap-3">
+                        <span class="award-tag">
+                            <i data-lucide="trophy" class="w-3.5 h-3.5 award-level-1"></i>
+                            数学建模国赛 · 省一等奖
+                        </span>
+                        <span class="award-tag">
+                            <i data-lucide="trophy" class="w-3.5 h-3.5 award-level-2"></i>
+                            电工杯数学建模 · 二等奖
+                        </span>
+                        <span class="award-tag">
+                            <i data-lucide="trophy" class="w-3.5 h-3.5 award-level-2"></i>
+                            计算机设计大赛 · 省二等奖
+                        </span>
+                        <span class="award-tag">
+                            <i data-lucide="trophy" class="w-3.5 h-3.5 award-level-3"></i>
+                            美国大学生数学建模竞赛 · H奖
+                        </span>
+                        <span class="award-tag">
+                            <i data-lucide="trophy" class="w-3.5 h-3.5 award-level-3"></i>
+                            服务外包创新大赛 · 省三等奖
+                        </span>
+                        <span class="award-tag">
+                            <i data-lucide="trophy" class="w-3.5 h-3.5 award-level-3"></i>
+                            蓝桥杯 Python · 省三等奖
+                        </span>
+                    </div>
+                    <p class="text-claude-muted text-sm mt-6">以上均为 2025 年度获得</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects -->
         <section id="projects" class="py-24 md:py-32 border-t border-claude-border reveal">
             <div class="flex justify-between items-end mb-16">
                 <div>
                     <h2 class="text-sm font-medium text-claude-muted tracking-widest uppercase mb-4">/ Projects</h2>
                     <h3 class="text-3xl md:text-4xl font-serif text-white">开源与实践</h3>
                 </div>
-                <a href="https://github.com/MieSheeeep" target="_blank" class="hidden md:flex items-center gap-2 text-claude-muted hover:text-claude-accent transition-colors text-sm">
+                <a href="https://github.com/MieSheeeep" target="_blank"
+                    class="hidden md:flex items-center gap-2 text-claude-muted hover:text-claude-accent transition-colors text-sm">
                     View all on GitHub <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </a>
             </div>
 
-            <!-- GitHub 动态抓取容器 -->
             <div id="github-projects-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- 加载骨架屏 -->
                 <div class="p-8 rounded-2xl bg-claude-surface border border-claude-border animate-pulse flex flex-col items-center justify-center min-h-[220px]">
                     <i data-lucide="loader-2" class="w-6 h-6 animate-spin text-claude-muted mb-3"></i>
                     <span class="text-sm text-claude-muted font-mono">Fetching latest works...</span>
@@ -214,111 +347,87 @@
             </div>
         </section>
 
-        <!-- 4. 文字与思考 (Writing) -->
-        <section id="writing" class="py-24 md:py-32 border-t border-claude-border reveal mb-20">
-            <h2 class="text-sm font-medium text-claude-muted tracking-widest uppercase mb-4">/ Writing</h2>
-            <h3 class="text-3xl md:text-4xl font-serif text-white mb-16">思考笔记</h3>
+        <!-- Blog -->
+        <section id="blog" class="py-24 md:py-32 border-t border-claude-border reveal mb-20">
+            <div class="flex justify-between items-end mb-16">
+                <div>
+                    <h2 class="text-sm font-medium text-claude-muted tracking-widest uppercase mb-4">/ Blog</h2>
+                    <h3 class="text-3xl md:text-4xl font-serif text-white">思考与记录</h3>
+                </div>
+            </div>
 
-            <!-- 极简文章列表表格风 -->
             <div class="border-t border-claude-border" id="blog-container">
-                <!-- JS 渲染区 -->
+                <div class="py-8 text-claude-muted text-sm flex items-center gap-2">
+                    <i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>
+                    加载文章列表...
+                </div>
             </div>
         </section>
 
     </main>
 
-    <!-- 底部 Footer -->
-    <footer class="border-t border-claude-border bg-claude-bg py-12 text-center relative z-10 transition-colors">
+    <!-- Footer -->
+    <footer class="border-t border-claude-border bg-claude-bg py-12 text-center relative z-10">
         <div class="max-w-4xl mx-auto px-6 md:px-12 flex flex-col-reverse md:flex-row justify-between items-center gap-6">
             <p class="text-claude-muted text-sm flex items-center gap-2">
-                &copy; <span id="year"></span> MieSheeeep. 
+                &copy; <span id="year"></span> MieSheeeep. Built with passion for ML.
             </p>
             <div class="flex gap-6 text-sm text-claude-muted">
-                <a href="#" class="hover:text-claude-accent transition-colors">Twitter</a>
                 <a href="https://github.com/MieSheeeep" target="_blank" class="hover:text-claude-accent transition-colors">GitHub</a>
-                <a href="#" class="hover:text-claude-accent transition-colors">Email</a>
+                <a href="mailto:hello@example.com" class="hover:text-claude-accent transition-colors">Email</a>
             </div>
         </div>
     </footer>
 
-    <!-- 动画与核心逻辑 -->
-    <style>
-        @keyframes scrolldown {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(200%); }
-        }
-    </style>
-
     <script>
-        // 1. 设置年份
+        // 年份
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        // 2. Navbar 滚动变色效果
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                nav.classList.add('scrolled');
-            } else {
-                nav.classList.remove('scrolled');
-            }
+        // 移动端菜单切换
+        document.getElementById('menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('open');
+        });
+        // 点击菜单链接后关闭
+        document.querySelectorAll('#mobile-menu a').forEach(a => {
+            a.addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.remove('open');
+            });
         });
 
-        // 3. 元素滚动出现在视口的动画 (Intersection Observer)
-        const revealElements = document.querySelectorAll('.reveal');
-        const revealConfig = {
-            threshold: 0.15, // 元素出现15%时触发
-            rootMargin: "0px 0px -50px 0px" // 稍微提前一点触发
-        };
-        const revealObserver = new IntersectionObserver(function(entries, observer) {
+        // Navbar 滚动
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            nav.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // 滚动渐显
+        const revealObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
-                if(entry.isIntersecting) {
+                if (entry.isIntersecting) {
                     entry.target.classList.add('active');
-                    observer.unobserve(entry.target); // 动画只触发一次
+                    observer.unobserve(entry.target);
                 }
             });
-        }, revealConfig);
-        revealElements.forEach(el => revealObserver.observe(el));
+        }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
         /**
-         * 4. 数据渲染逻辑: 博客文章
+         * 博客系统：从 posts/posts.json 加载文章列表
          */
-        const BLOG_CONFIG = [
-            {
-                id: "post-1",
-                title: "对大模型驱动的下一个自然交互范式的探索",
-                url: "#",
-                date: "Aug 24, 2024",
-                readTime: "8 min read"
-            },
-            {
-                id: "post-2",
-                title: "论系统架构设计中的『克制』与『折衷』",
-                url: "#",
-                date: "Nov 02, 2023",
-                readTime: "12 min read"
-            },
-            {
-                id: "post-3",
-                title: "为什么我们最终都需要回归单体应用（Monolith）？",
-                url: "#",
-                date: "Dec 10, 2023",
-                readTime: "5 min read"
-            }
-        ];
-
-        function renderBlogs(data) {
+        async function loadBlogPosts() {
             const container = document.getElementById('blog-container');
-            if (!container) return;
+            try {
+                const res = await fetch('posts/posts.json');
+                if (!res.ok) throw new Error('No posts found');
+                const posts = await res.json();
 
-            if (!data || data.length === 0) {
-                container.innerHTML = `<div class="py-8 text-claude-muted text-sm border-b border-claude-border">暂无文章沉淀</div>`;
-                return;
-            }
+                if (posts.length === 0) {
+                    container.innerHTML = '<div class="py-8 text-claude-muted text-sm border-b border-claude-border">暂无文章</div>';
+                    return;
+                }
 
-            const html = data.map(post => {
-                // Claude 极简风格列表：没有卡片框，只有线条、时间与标题
-                return `
-                    <a href="${post.url}" class="group block flex flex-col md:flex-row md:items-center py-6 border-b border-claude-border hover:bg-claude-surface/30 px-4 -mx-4 rounded-xl transition-all duration-300">
+                container.innerHTML = posts.map(post => `
+                    <a href="post.html?slug=${post.slug}" class="group block flex flex-col md:flex-row md:items-center py-6 border-b border-claude-border hover:bg-claude-surface/30 px-4 -mx-4 rounded-xl transition-all duration-300">
                         <div class="md:w-32 flex-shrink-0 text-sm text-claude-muted font-mono mb-2 md:mb-0">
                             ${post.date}
                         </div>
@@ -326,88 +435,70 @@
                             <h4 class="text-lg text-claude-text group-hover:text-claude-accent transition-colors font-medium">
                                 ${post.title}
                             </h4>
+                            ${post.tags ? `<div class="flex gap-2 mt-1">${post.tags.map(t => `<span class="text-xs text-claude-muted bg-claude-surface px-2 py-0.5 rounded">${t}</span>`).join('')}</div>` : ''}
                         </div>
-                        <div class="flex-shrink-0 text-sm pl-0 md:pl-4 mt-2 md:mt-0 text-claude-muted/50 hidden md:block">
-                            ${post.readTime}
-                        </div>
-                        <div class="flex-shrink-0 text-claude-muted pl-4 opacity-0 group-hover:opacity-100 transition-opacity -translate-x-2 group-hover:translate-x-0 hidden md:block">
+                        <div class="flex-shrink-0 text-claude-muted pl-4 opacity-0 group-hover:opacity-100 transition-opacity hidden md:block">
                             <i data-lucide="arrow-right" class="w-5 h-5"></i>
                         </div>
                     </a>
-                `;
-            }).join('');
-
-            container.innerHTML = html;
+                `).join('');
+                lucide.createIcons();
+            } catch (e) {
+                container.innerHTML = '<div class="py-8 text-claude-muted text-sm border-b border-claude-border">暂无文章，敬请期待</div>';
+            }
         }
 
         /**
-         * 5. 动态抓取 GitHub 项目
+         * GitHub 项目
          */
         async function fetchGitHubProjects(username) {
             const container = document.getElementById('github-projects-container');
-            if (!container) return;
+            try {
+                const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`);
+                if (!res.ok) throw new Error('Failed to fetch');
+                const repos = await res.json();
+                const topRepos = repos.filter(repo => !repo.fork).slice(0, 4);
 
-            // 稍微延长假加载时间为了动画美感 (生产环境可去掉setTimeout)
-            setTimeout(async () => {
-                try {
-                    const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`);
-                    if (!res.ok) throw new Error('Failed to fetch');
-                    
-                    const repos = await res.json();
-                    
-                    // 过滤 fork，取前 4 个
-                    const topRepos = repos.filter(repo => !repo.fork).slice(0, 4);
-                    
-                    if (topRepos.length === 0) {
-                        container.innerHTML = `<div class="col-span-full py-12 text-center text-claude-muted">Repository is empty.</div>`;
-                        return;
-                    }
-
-                    // 渲染项目：去除高亮的背景，采用类首选项的高级圆角平滑卡片
-                    const html = topRepos.map((repo) => {
-                        return `
-                        <a href="${repo.html_url}" target="_blank" class="group relative flex flex-col justify-between p-8 rounded-2xl bg-claude-surface border border-claude-border hover:border-claude-accent/50 hover:bg-claude-surfaceHover transition-all duration-500 overflow-hidden">
-                            <!-- 聚焦遮罩增强质感 -->
-                            <div class="absolute inset-0 bg-gradient-to-br from-claude-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                            
-                            <div class="relative z-10">
-                                <div class="flex justify-between items-start mb-4">
-                                    <i data-lucide="folder-code" class="w-8 h-8 text-claude-muted group-hover:text-claude-accent transition-colors duration-300"></i>
-                                    <i data-lucide="arrow-up-right" class="w-5 h-5 text-claude-border group-hover:text-claude-accent transition-colors duration-300"></i>
-                                </div>
-                                <h3 class="text-xl font-serif text-white mb-3 group-hover:text-claude-accent transition-colors duration-300">${repo.name}</h3>
-                                <p class="text-sm text-claude-muted leading-relaxed line-clamp-3 mb-6">${repo.description || '暂无详细描述信息。'}</p>
-                            </div>
-                            
-                            <div class="relative z-10 flex justify-between items-center pt-4 border-t border-claude-border/50">
-                                <div class="flex items-center gap-2">
-                                    <span class="w-2 h-2 rounded-full bg-claude-muted group-hover:bg-claude-accent transition-colors"></span>
-                                    <span class="text-xs text-claude-muted">${repo.language || 'Markdown'}</span>
-                                </div>
-                                <span class="text-xs text-claude-muted flex items-center gap-1">
-                                    <i data-lucide="star" class="w-3.5 h-3.5"></i> ${repo.stargazers_count}
-                                </span>
-                            </div>
-                        </a>
-                        `;
-                    }).join('');
-                    
-                    container.innerHTML = html;
-                    lucide.createIcons();
-                    
-                } catch (err) {
-                    console.error(err);
-                    container.innerHTML = `<div class="col-span-full py-12 text-center text-claude-muted">Failed to load from GitHub.<br/>${err.message}</div>`;
+                if (topRepos.length === 0) {
+                    container.innerHTML = '<div class="col-span-full py-12 text-center text-claude-muted">暂无公开仓库</div>';
+                    return;
                 }
-            }, 800);
+
+                container.innerHTML = topRepos.map(repo => `
+                    <a href="${repo.html_url}" target="_blank" class="group relative flex flex-col justify-between p-8 rounded-2xl bg-claude-surface border border-claude-border hover:border-claude-accent/50 hover:bg-claude-surfaceHover transition-all duration-500 overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-claude-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="relative z-10">
+                            <div class="flex justify-between items-start mb-4">
+                                <i data-lucide="folder-code" class="w-8 h-8 text-claude-muted group-hover:text-claude-accent transition-colors duration-300"></i>
+                                <i data-lucide="arrow-up-right" class="w-5 h-5 text-claude-border group-hover:text-claude-accent transition-colors duration-300"></i>
+                            </div>
+                            <h3 class="text-xl font-serif text-white mb-3 group-hover:text-claude-accent transition-colors duration-300">${repo.name}</h3>
+                            <p class="text-sm text-claude-muted leading-relaxed line-clamp-3 mb-6">${repo.description || '暂无描述'}</p>
+                        </div>
+                        <div class="relative z-10 flex justify-between items-center pt-4 border-t border-claude-border/50">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-claude-muted group-hover:bg-claude-accent transition-colors"></span>
+                                <span class="text-xs text-claude-muted">${repo.language || 'Markdown'}</span>
+                            </div>
+                            <span class="text-xs text-claude-muted flex items-center gap-1">
+                                <i data-lucide="star" class="w-3.5 h-3.5"></i> ${repo.stargazers_count}
+                            </span>
+                        </div>
+                    </a>
+                `).join('');
+                lucide.createIcons();
+            } catch (err) {
+                container.innerHTML = `<div class="col-span-full py-12 text-center text-claude-muted">GitHub 加载失败: ${err.message}</div>`;
+            }
         }
 
-        // 6. 初始化
+        // 初始化
         document.addEventListener('DOMContentLoaded', () => {
-            renderBlogs(BLOG_CONFIG);
             lucide.createIcons();
+            loadBlogPosts();
             fetchGitHubProjects('MieSheeeep');
         });
     </script>
 </body>
+
 </html>
