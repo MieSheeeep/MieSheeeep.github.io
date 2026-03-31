@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" class="scroll-smooth">
+<html lang="zh-CN" class="scroll-smooth dark">
 
 <head>
     <meta charset="UTF-8">
@@ -17,6 +17,7 @@
 
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
@@ -25,12 +26,12 @@
                     },
                     colors: {
                         claude: {
-                            bg: '#141414',
-                            surface: '#1F1E1D',
-                            surfaceHover: '#2A2928',
-                            border: '#333130',
-                            text: '#D6D2CC',
-                            muted: '#8E8A85',
+                            bg: 'var(--bg)',
+                            surface: 'var(--surface)',
+                            surfaceHover: 'var(--surface-hover)',
+                            border: 'var(--border)',
+                            text: 'var(--text)',
+                            muted: 'var(--muted)',
                             accent: '#D97757',
                             accentHover: '#E38859'
                         }
@@ -41,22 +42,98 @@
     </script>
 
     <style>
+        /* ===== 主题变量 ===== */
+        :root {
+            --bg: #141414;
+            --surface: #1F1E1D;
+            --surface-hover: #2A2928;
+            --border: #333130;
+            --text: #D6D2CC;
+            --muted: #8E8A85;
+            --nav-bg: rgba(20, 20, 20, 0.85);
+            --scrollbar-track: #141414;
+            --scrollbar-thumb: #333130;
+            --heading: #ffffff;
+        }
+        html:not(.dark) {
+            --bg: #FAFAF8;
+            --surface: #FFFFFF;
+            --surface-hover: #F0EFED;
+            --border: #E2E0DC;
+            --text: #3D3B37;
+            --muted: #8E8A85;
+            --nav-bg: rgba(250, 250, 248, 0.85);
+            --scrollbar-track: #FAFAF8;
+            --scrollbar-thumb: #D6D2CC;
+            --heading: #1A1918;
+        }
+
         body {
-            background-color: #141414;
-            color: #D6D2CC;
+            background-color: var(--bg);
+            color: var(--text);
             font-family: 'Inter', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            cursor: none;
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
 
+        /* 链接和可交互元素也隐藏系统光标 */
+        a, button, input, textarea, select, [role="button"] { cursor: none; }
+
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #141414; }
-        ::-webkit-scrollbar-thumb { background: #333130; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #8E8A85; }
+        ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+        ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
 
         ::selection {
             background-color: rgba(217, 119, 87, 0.3);
             color: #fff;
+        }
+
+        /* ===== 自定义光标 ===== */
+        .cursor-dot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 8px;
+            background: #D97757;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background 0.2s;
+        }
+        .cursor-ring {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 36px;
+            height: 36px;
+            border: 1.5px solid rgba(217, 119, 87, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: width 0.25s, height 0.25s, border-color 0.25s, background 0.25s;
+        }
+        .cursor-dot.hover {
+            width: 12px;
+            height: 12px;
+            background: rgba(217, 119, 87, 0.8);
+        }
+        .cursor-ring.hover {
+            width: 50px;
+            height: 50px;
+            border-color: rgba(217, 119, 87, 0.3);
+            background: rgba(217, 119, 87, 0.05);
+        }
+
+        /* 移动端隐藏自定义光标 */
+        @media (pointer: coarse) {
+            .cursor-dot, .cursor-ring { display: none; }
+            body, a, button, input, textarea, select, [role="button"] { cursor: auto; }
         }
 
         .reveal {
@@ -70,17 +147,16 @@
         }
 
         .nav-blur {
-            background: rgba(20, 20, 20, 0.85);
+            background: var(--nav-bg);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid transparent;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.3s ease, background 0.4s ease;
         }
         .nav-blur.scrolled {
-            border-bottom: 1px solid #333130;
+            border-bottom: 1px solid var(--border);
         }
 
-        /* 移动端菜单 */
         .mobile-menu {
             max-height: 0;
             overflow: hidden;
@@ -98,14 +174,14 @@
             padding: 6px 14px;
             border-radius: 9999px;
             font-size: 0.8rem;
-            border: 1px solid #333130;
-            background: #1F1E1D;
-            color: #D6D2CC;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
             transition: all 0.3s;
         }
         .award-tag:hover {
             border-color: rgba(217, 119, 87, 0.5);
-            background: #2A2928;
+            background: var(--surface-hover);
         }
         .award-level-1 { color: #F59E0B; }
         .award-level-2 { color: #D97757; }
@@ -138,15 +214,45 @@
             top: 20px;
             width: 1px;
             height: calc(100% - 8px);
-            background: #333130;
+            background: var(--border);
         }
         .timeline-item:last-child::after {
             display: none;
+        }
+
+        /* 主题切换按钮动画 */
+        .theme-toggle {
+            position: relative;
+            width: 20px;
+            height: 20px;
+        }
+        .theme-toggle svg {
+            position: absolute;
+            inset: 0;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        /* 白色标题文字在亮色模式下适配 */
+        .text-white {
+            color: var(--heading);
+        }
+
+        /* 全局过渡 */
+        *, *::before, *::after {
+            transition-property: background-color, border-color, color;
+            transition-duration: 0s;
+        }
+        html.theme-transitioning *, html.theme-transitioning *::before, html.theme-transitioning *::after {
+            transition-duration: 0.4s;
         }
     </style>
 </head>
 
 <body class="selection:bg-claude-accent/30 tracking-wide font-light">
+
+    <!-- 自定义光标 -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-ring" id="cursor-ring"></div>
 
     <!-- 顶部导航 -->
     <header id="navbar" class="fixed top-0 w-full z-50 nav-blur">
@@ -155,15 +261,27 @@
                 class="font-serif text-lg font-medium tracking-wider text-claude-text hover:text-claude-accent transition-colors duration-300">
                 MieSheeeep.
             </a>
-            <nav class="hidden md:flex gap-8 text-sm text-claude-muted">
-                <a href="#about" class="hover:text-claude-text transition-colors duration-300">About</a>
-                <a href="#awards" class="hover:text-claude-text transition-colors duration-300">Awards</a>
-                <a href="#projects" class="hover:text-claude-text transition-colors duration-300">Projects</a>
-                <a href="#blog" class="hover:text-claude-text transition-colors duration-300">Blog</a>
-            </nav>
-            <button id="menu-btn" class="md:hidden text-claude-muted hover:text-claude-text">
-                <i data-lucide="menu" class="w-5 h-5"></i>
-            </button>
+            <div class="hidden md:flex items-center gap-8">
+                <nav class="flex gap-8 text-sm text-claude-muted">
+                    <a href="#about" class="hover:text-claude-text transition-colors duration-300">About</a>
+                    <a href="#awards" class="hover:text-claude-text transition-colors duration-300">Awards</a>
+                    <a href="#projects" class="hover:text-claude-text transition-colors duration-300">Projects</a>
+                    <a href="#blog" class="hover:text-claude-text transition-colors duration-300">Blog</a>
+                </nav>
+                <button id="theme-toggle" class="text-claude-muted hover:text-claude-accent transition-colors" aria-label="Toggle theme">
+                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+                    <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+                </button>
+            </div>
+            <div class="flex md:hidden items-center gap-4">
+                <button id="theme-toggle-mobile" class="text-claude-muted hover:text-claude-accent transition-colors" aria-label="Toggle theme">
+                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+                    <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+                </button>
+                <button id="menu-btn" class="text-claude-muted hover:text-claude-text">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
+            </div>
         </div>
         <!-- 移动端菜单 -->
         <div id="mobile-menu" class="mobile-menu md:hidden px-6 pb-4">
@@ -212,7 +330,7 @@
                     <div class="flex items-center gap-4 text-claude-muted">
                         <a href="https://github.com/MieSheeeep" target="_blank"
                             class="hover:text-claude-text transition-colors"><i data-lucide="github" class="w-5 h-5"></i></a>
-                        <a href="mailto:hello@example.com" class="hover:text-claude-text transition-colors"><i
+                        <a href="mailto:3224782312@qq.com" class="hover:text-claude-text transition-colors"><i
                                 data-lucide="mail" class="w-5 h-5"></i></a>
                     </div>
                 </div>
@@ -267,10 +385,10 @@
                         <div>
                             <h3 class="text-white font-serif text-lg mb-3">技术栈</h3>
                             <ul class="text-claude-muted space-y-2 text-sm">
-                                <li>Python / C++</li>
-                                <li>PyTorch / TensorFlow</li>
-                                <li>Transformer / LLM</li>
+                                <li>Python</li>
+                                <li>PyTorch</li>
                                 <li>NumPy / Pandas / Matplotlib</li>
+                                <li> Vibe-Coding </li>
                             </ul>
                         </div>
                         <div>
@@ -374,20 +492,101 @@
             </p>
             <div class="flex gap-6 text-sm text-claude-muted">
                 <a href="https://github.com/MieSheeeep" target="_blank" class="hover:text-claude-accent transition-colors">GitHub</a>
-                <a href="mailto:hello@example.com" class="hover:text-claude-accent transition-colors">Email</a>
+                <a href="mailto:3224782312@qq.com" class="hover:text-claude-accent transition-colors">Email</a>
             </div>
         </div>
     </footer>
 
     <script>
+        // ===== 主题系统 =====
+        function getTheme() {
+            const saved = localStorage.getItem('theme');
+            if (saved) return saved;
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
+        function applyTheme(theme) {
+            const html = document.documentElement;
+            html.classList.add('theme-transitioning');
+            if (theme === 'dark') {
+                html.classList.add('dark');
+            } else {
+                html.classList.remove('dark');
+            }
+            localStorage.setItem('theme', theme);
+            // 移除过渡类，防止影响其他动画
+            setTimeout(() => html.classList.remove('theme-transitioning'), 500);
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+            applyTheme(current === 'dark' ? 'light' : 'dark');
+            lucide.createIcons();
+        }
+
+        // 初始应用主题（无动画）
+        applyTheme(getTheme());
+
+        // ===== 自定义光标 =====
+        const dot = document.getElementById('cursor-dot');
+        const ring = document.getElementById('cursor-ring');
+        let mouseX = -100, mouseY = -100;
+        let ringX = -100, ringY = -100;
+
+        document.addEventListener('mousemove', e => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            dot.style.left = mouseX + 'px';
+            dot.style.top = mouseY + 'px';
+        });
+
+        // 光标环跟随动画（有延迟的弹性跟随）
+        function animateRing() {
+            ringX += (mouseX - ringX) * 0.15;
+            ringY += (mouseY - ringY) * 0.15;
+            ring.style.left = ringX + 'px';
+            ring.style.top = ringY + 'px';
+            requestAnimationFrame(animateRing);
+        }
+        animateRing();
+
+        // 悬浮在可交互元素上时放大光标
+        document.addEventListener('mouseover', e => {
+            const interactive = e.target.closest('a, button, input, textarea, [role="button"]');
+            if (interactive) {
+                dot.classList.add('hover');
+                ring.classList.add('hover');
+            }
+        });
+        document.addEventListener('mouseout', e => {
+            const interactive = e.target.closest('a, button, input, textarea, [role="button"]');
+            if (interactive) {
+                dot.classList.remove('hover');
+                ring.classList.remove('hover');
+            }
+        });
+
+        // 鼠标离开/进入窗口
+        document.addEventListener('mouseleave', () => {
+            dot.style.opacity = '0';
+            ring.style.opacity = '0';
+        });
+        document.addEventListener('mouseenter', () => {
+            dot.style.opacity = '1';
+            ring.style.opacity = '1';
+        });
+
         // 年份
         document.getElementById('year').textContent = new Date().getFullYear();
+
+        // 主题切换按钮
+        document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+        document.getElementById('theme-toggle-mobile').addEventListener('click', toggleTheme);
 
         // 移动端菜单切换
         document.getElementById('menu-btn').addEventListener('click', () => {
             document.getElementById('mobile-menu').classList.toggle('open');
         });
-        // 点击菜单链接后关闭
         document.querySelectorAll('#mobile-menu a').forEach(a => {
             a.addEventListener('click', () => {
                 document.getElementById('mobile-menu').classList.remove('open');
