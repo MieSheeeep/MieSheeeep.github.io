@@ -3,6 +3,19 @@
         "slug": "hello-world",
         "title": "Hello World - 我的第一篇博客",
         "date": "2025-03-31",
-        "tags": ["随笔", "博客"]
+        "tags": [
+            "随笔",
+            "博客"
+        ]
+    },
+    {
+        "slug": "adaptive-position-encode",
+        "title": "Ide-Adaptive Position Encode",
+        "date": "2026-04-12",
+        "tags": [
+            "研究",
+            "Transformer",
+            "位置编码"
+        ]
     }
 ]
