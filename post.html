@@ -28,6 +28,11 @@
     />
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
 
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
     <script>
       tailwind.config = {
         darkMode: "class",
@@ -648,8 +653,23 @@
           if (!res.ok) throw new Error("Cannot load article");
           const text = await res.text();
 
+          // 修正 markdown 中的相对路径，使其相对于 posts/ 目录
+          const fixedText = text.replace(
+            /!\[([^\]]*)\]\((?!https?:\/\/|\/)(.*?)\)/g,
+            (match, alt, src) => `![${alt}](posts/${src})`
+          );
+
           document.getElementById("post-content").innerHTML =
-            marked.parse(text);
+            marked.parse(fixedText);
+
+          // 渲染数学公式
+          renderMathInElement(document.getElementById("post-content"), {
+            delimiters: [
+              { left: "$$", right: "$$", display: true },
+              { left: "$", right: "$", display: false },
+            ],
+            throwOnError: false,
+          });
         } catch (e) {
           document.getElementById("post-content").innerHTML =
             `<div class="py-12 text-center text-claude-muted">文章加载失败: ${e.message}</div>`;
